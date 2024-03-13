@@ -1,0 +1,83 @@
+{
+  "timeZone": "America/Toronto",
+  "dependencies": {
+    "enabledAdvancedServices": [{
+      "userSymbol": "Drive",
+      "serviceId": "drive",
+      "version": "v2"
+    }, {
+      "userSymbol": "Gmail",
+      "serviceId": "gmail",
+      "version": "v1"
+    }, {
+      "userSymbol": "Docs",
+      "serviceId": "docs",
+      "version": "v1"
+    }]
+  },
+  "webapp": {
+    "access": "ANYONE_ANONYMOUS",
+    "executeAs": "USER_DEPLOYING"
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "sheets": {
+    "macros": [{
+      "menuName": "FormatHeaders",
+      "functionName": "FormatHeaders"
+    }, {
+      "menuName": "Format Date",
+      "functionName": "FormatDate"
+    }, {
+      "menuName": "FormatDay",
+      "functionName": "FormatDay"
+    }, {
+      "menuName": "Insert Image",
+      "functionName": "InsertImage"
+    }, {
+      "menuName": "addFormatImage",
+      "functionName": "addFormatImage"
+    }, {
+      "menuName": "Title",
+      "functionName": "Title"
+    }, {
+      "menuName": "Totalling Hours",
+      "functionName": "TotallingHours"
+    }, {
+      "menuName": "Delete Columns",
+      "functionName": "DeleteColumns"
+    }, {
+      "menuName": "Testing Named ranges",
+      "functionName": "TestingNamedranges"
+    }, {
+      "menuName": "Test names 2",
+      "functionName": "Testnames2"
+    }, {
+      "menuName": "delete empty columns and rows",
+      "functionName": "deleteemptycolumnsandrows"
+    }, {
+      "menuName": "Downloading sheet",
+      "functionName": "Downloadingsheet"
+    }, {
+      "menuName": "Copy to new ",
+      "functionName": "Copytonew"
+    }, {
+      "menuName": "Copy to new Sheet",
+      "functionName": "CopytonewSheet"
+    }, {
+      "menuName": "Formatting the logsheet",
+      "functionName": "Formattingthelogsheet",
+      "defaultShortcut": "Ctrl+Alt+Shift+2"
+    }, {
+      "menuName": "More Formatting",
+      "functionName": "MoreFormatting",
+      "defaultShortcut": "Ctrl+Alt+Shift+3"
+    }, {
+      "menuName": "Pasting Sum ",
+      "functionName": "PastingSum"
+    }, {
+      "menuName": "getShet",
+      "functionName": "getShet"
+    }]
+  }
+}
