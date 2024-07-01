@@ -4,7 +4,7 @@
     "enabledAdvancedServices": [{
       "userSymbol": "Drive",
       "serviceId": "drive",
-      "version": "v2"
+      "version": "v3"
     }, {
       "userSymbol": "Gmail",
       "serviceId": "gmail",
@@ -13,6 +13,10 @@
       "userSymbol": "Docs",
       "serviceId": "docs",
       "version": "v1"
+    }, {
+      "userSymbol": "Sheets",
+      "serviceId": "sheets",
+      "version": "v4"
     }]
   },
   "webapp": {
@@ -78,6 +82,17 @@
     }, {
       "menuName": "getShet",
       "functionName": "getShet"
+    }, {
+      "menuName": "trim Sheet",
+      "functionName": "trimSheet",
+      "defaultShortcut": "Ctrl+Alt+Shift+9"
+    }, {
+      "menuName": "Formatting a sheet",
+      "functionName": "Formattingasheet",
+      "defaultShortcut": "Ctrl+Alt+Shift+2"
+    }, {
+      "menuName": "Prep Sheet to print",
+      "functionName": "PrepSheettoprint"
     }]
   }
 }

@@ -1,33 +1,84 @@
-<script>
-  window.addEventListener('load', function() {
-    console.log('Page is loaded');
-    setFocusToTextBox();
-  });
-  // Loading animation 
-  function handleFormSubmit(){
-    console.log("This Log is after the form object log");
-    document.getElementById("logButton").disabled=true;
-    document.getElementById("output").innerhtml="processing";
-    let customerSelect = document.getElementById("customerSelect").value;
-    let customerName = document.getElementById("customerName").value;
-    let machineSelect = document.getElementById("machineSelect").value;
-    let machineName = document.getElementById("machineName").value;
-    let logEntry = document.getElementById("logEntry").value;
-    let hours = document.getElementById("totalHours").value;
-    let order = document.getElementById("workOrder").value;
-    let formObject = {
-          customerSelect:customerSelect,
-          customerName:customerName,
-          machineSelect:machineSelect,
-          machineName:machineName,
-          logEntry:logEntry,
-          totalHours:hours,
-          workOrder:order
-        };
-    console.log(formObject);
-    google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
-  };
+<script type="text/javascript">
+ 
+
+  //  function handleFormSubmit(){
+  //   console.log("This Log is after the form object log");
+  //   document.getElementById("logButton").disabled=true;
+  //   document.getElementById("output").innerhtml="processing";
+  //   let customerSelect = document.getElementById("customerSelect").value;
+  //   let customerName = document.getElementById("customerName").value;
+  //   let machineSelect = document.getElementById("machineSelect").value;
+  //   let machineName = document.getElementById("machineName").value;
+  //   let logEntry = document.getElementById("logEntry").value;
+  //   let hours = document.getElementById("totalHours").value;
+  //   let order = document.getElementById("workOrder").value;
+  //   let formObject = {
+  //         customerSelect:customerSelect,
+  //         customerName:customerName,
+  //         machineSelect:machineSelect,
+  //         machineName:machineName,
+  //         logEntry:logEntry,
+  //         totalHours:hours,
+  //         workOrder:order
+  //       };
+  //   console.log(formObject);
+  //   google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
+  // };
   
+  // Loading animation 
+  // function handleFormSubmit(){
+  //   console.log("This Log is after the form object log");
+  //   document.getElementById("logButton").disabled=true;
+  //   document.getElementById("output").innerhtml="processing";
+  //   let customerSelect = document.getElementById("customerSelect").value;
+  //   let customerName = document.getElementById("customerName").value;
+  //   let machineSelect = document.getElementById("machineSelect").value;
+  //   let machineName = document.getElementById("machineName").value;
+  //   let logEntry = document.getElementById("logEntry").value;
+  //   let hours = document.getElementById("totalHours").value;
+  //   let order = document.getElementById("workOrder").value;
+  //   let formObject = {
+  //         customerSelect:customerSelect,
+  //         customerName:customerName,
+  //         machineSelect:machineSelect,
+  //         machineName:machineName,
+  //         logEntry:logEntry,
+  //         totalHours:hours,
+  //         workOrder:order
+  //       };
+  //   console.log(formObject);
+  //   google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
+  // };
+  
+  // function onSuccess(message){
+  //   console.log("I was called! ");
+  //   clearForm();
+  //   window.scrollTo(0,0); 
+  //   let div = document.getElementById("output");
+  //   let addAnother = document.getElementById("logButton");
+  //   addAnother.innerHTML = "Add Another Entry";
+  //   div.innerHTML = message;
+  //   setFocusToTextBox();
+  // };
+
+  
+  function clearForm(){
+    const one = document.getElementById("customerSelect");
+    const two = document.getElementById("customerName");
+    const three = document.getElementById("machineSelect");
+    const four = document.getElementById("machineName");
+    const five = document.getElementById("logEntry");
+    const six = document.getElementById("totalHours");
+    const seven = document.getElementById("workOrder");
+    const eight = document.getElementById("addOrderDate");
+    const nine = document.getElementById("orderDate");
+    let feilds = [one,two,three,four,five,six,seven,eight,nine];
+
+    feilds.forEach((field) => (field.value=""));
+    document.getElementById("logButton").disabled=false;
+    return;
+  };
+
   function onSuccess(message){
     console.log("I was called! ");
     clearForm();
@@ -37,32 +88,110 @@
     addAnother.innerHTML = "Add Another Entry";
     div.innerHTML = message;
     setFocusToTextBox();
+    return
   };
-  
-  function clearForm(){
-    const 1 = document.getElementById("customerSelect");
-    const 2 = document.getElementById("customerName");
-    const 3 = document.getElementById("machineSelect");
-    const 4 = document.getElementById("machineName");
-    const 5 = document.getElementById("logEntry");
-    const 6 = document.getElementById("totalHours");
-    const 7 = document.getElementById("workOrder");
-    
-  let reset = [1,2,3,4,5,6,7];
-    reset.forEach(ele){function(
-    reset.refresh();
-    document.
-    )};
-  };
-
+</script>
+<script>
   function onFailure(message){
     console.log("Failure Handler Was Called"+ message)
     document.getElementById("output").innerHTML="Failure Handler Was Called: "+ message;
+    return
   };
-
+</script>
+<script>
+  function handleFormSubmit(){
+    console.log("This Log is after the form object log");
+    document.getElementById("logButton").disabled=true;
+    document.getElementById("output").innerHTML="processing...";
+    let addDate = document.getElementById("addOrderDate").value;
+    let orderDate = document.getElementById("orderDate").value;
+    let customerSelect = document.getElementById("customerSelect").value;
+    let customerName = document.getElementById("customerName").value;
+    let machineSelect = document.getElementById("machineSelect").value;
+    let machineName = document.getElementById("machineName").value;
+    let logEntry = document.getElementById("logEntry").value;
+    let hours = document.getElementById("totalHours").value;
+    let order = document.getElementById("workOrder").value;
+    let formObject = {
+          addDateCheck:addDate,
+          dateOfOrder: orderDate,
+          customerSelect:customerSelect,
+          customerName:customerName,
+          machineSelect:machineSelect,
+          machineName:machineName,
+          logEntry:logEntry,
+          totalHours:hours,
+          workOrder:order,
+      };
+    console.log(formObject);
+    google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
+    return
+  };
+</script>
+<script>
+  function gotMachines(machines){
+    console.log("Success handler called!!!!!")
+    console.log(machines);
+    let machineSelection = document.getElementById('machineSelect');
+    let selectMachine = document.getElementById("selectMachine").classList;
+    console.log(selectMachine);
+    document.getElementById('selectMachine').classList.remove("hidetillneeded");
+    selectMachine.remove("hideTillNeeded")
+    machineSelection.length = 0;
+    machines.forEach(function(machineEntry){
+    machineSelection.options.add(new Option(machineEntry, machineEntry))
+    });
+  };
+</script>
+<script>
+  function noMachines(error){
+    console.log("Failure handler Called!!!! It returned: "+error)
+    let selectMachine = document.getElementById('machineSelect');
+    selectMachine.options.add(new Option("Machine Look up Failed","Failed"))
+    return
+  };
+</script>
+<script>
+  function checkOption(selection){    
+    console.log(selection);
+    let addMachineName = document.getElementById("newMachine");
+    if(selection === "New Machine"){
+      addMachineName.classList.remove("hideTillNeeded");
+    }else{
+      addMachineName.classList.add("hideTillNeeded"); 
+    };
+  };
+</script>
+<script>
+  function gotCustomer(customer){
+    console.log("Select Box change Heard and function will be called with the value of:")
+    console.log(customer);
+    let addCustomerName = document.getElementById("newCustomer").classList;
+    let addMachineName = document.getElementById("newMachine").classList;
+    let selectMachine = document.getElementById("selectMachine").classList;
+    let selectName = document.getElementById("customerSelect");
+        customer = selectName.value;
+        console.log(customer);
+      if(customer === "New Customer"){
+        addCustomerName.remove("hideTillNeeded");
+        addMachineName.remove("hideTillNeeded");
+        selectMachine.add("hideTillNeeded");
+        console.log("Customer Name was matched as true");
+      }else {
+        console.log("This is the passed value before getting it from element: "+customer);
+        customer = selectName.value;    
+        console.log(customer);
+        selectMachine.remove("hideTillNeeded");
+        addCustomerName.add("hideTillNeeded");
+        addMachineName.add("hideTillNeeded");
+        document.getElementById("machineSelect").remove(machineSelect.pleaseSelect);
+        google.script.run.withSuccessHandler(gotMachines).withFailureHandler(noMachines).GetMachines(customer); 
+      };
+    };
+</script>
+  <script>
   function setFocusToTextBox(){
     document.getElementById("customerSelect").focus();
-  
   };
 
   function EmailSheet(){
@@ -79,11 +208,38 @@
     div.innerHTML = message;
     setFocusToTextBox()
   removeSpinner('is-active');
+  };
 
-  }
-   function EmailFailure(message){
+  function EmailFailure(message){
     console.log("Failure to Send Email"+ message)
   removeSpinner('is-active');
   };
 
- </script>
+  // function addDateField(){
+  //   let checkBox = document.getElementById("addOrderDate");
+  // // Get the output text
+  //   let addDate = document.getElementById("orderDateField");
+
+  // // If the checkbox is checked, display the output text
+  //   if (checkBox.checked == true){
+  //     addDate.classList.remove("hideTillNeeded");
+  //   }else{
+  //     addDate.classList.add("hideTillNeeded"); 
+  //   };
+  // }
+  const addOrderDateCheckBox = document.querySelector("#addOrderDate");
+  const orderDateInput = document.querySelector("#orderDateField");
+  orderDateInput.style.visibility = "hidden";
+  
+  addOrderDateCheckBox.addEventListener("change", () => {
+      if(addOrderDateCheckBox.checked){
+        console.log("Checkbox listener function has been triggered! and evaluates TRUE");
+        orderDateInput.style.visibility = "visible"; 
+      } else {
+        orderDateInput.style.visibility = "hidden";
+        console.log("Checkbox listener function has been triggered! and evaluates FALSE");
+      }
+    }
+  );
+  console.log("Javescript has been evaluated to the bottom of the page!");
+</script>

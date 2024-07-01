@@ -1,70 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <base target="_top"> 
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css"/>
-  <?!= include('JavaScript'); ?>
-  <script> 
-    function NoMachines(error){
-      console.log("Failure handler Called!!!! It returned: "+error)
-      let selectMachine = document.getElementById('machineSelect');
-      selectMachine.options.add(new Option("Machine Look up Failed","Failed"))
-      return
-  }
-    function GotMachines(machines){
-      console.log("Success handler called!!!!!")
-      console.log(machines);
-      let machineSelection = document.getElementById('machineSelect');
-      let selectMachine = document.getElementById("selectMachine");
-      document.getElementById('selectMachine').classList.remove("hidetillneeded");
-      machineSelection.length = 0;
-      machines.forEach(function(machineEntry){
-      machineSelection.options.add(new Option(machineEntry, machineEntry));
-    });
-  };
-    function GotCustomer(customer){
-      console.log("Select Box change Heard and function will be called with the value of:")
-      console.log(customer);
-    let addCustomerName = document.getElementById("newCustomer");
-    let addMachineName = document.getElementById("newMachine");
-    let selectMachine = document.getElementById("selectMachine");
-    let selectName = document.getElementById("customerSelect");
-        customer = selectName.value;
-        console.log(customer);
-      if(customer === "New Customer"){
-        addCustomerName.classList.remove("hidetillneeded");
-        addMachineName.classList.remove("hidetillneeded");
-        selectMachine.classList.add("hidetillneeded");
-        console.log("Customer Name was matched as true");
-      }else {
-        console.log("THis is the passed value before getting it from element: "+customer);
-        customer = selectName.value;    
-        console.log(customer);
-        selectMachine.classList.remove("hidetillneeded");
-        addCustomerName.classList.add("hidetillneeded");
-        addMachineName.classList.add("hidetillneeded");
-        // selectMachine.remove(selectMachine.pleaseSelect);
-        google.script.run.withSuccessHandler(GotMachines).withFailureHandler(NoMachines).GetMachines(customer); 
-      };
-    };
-
-    function CheckOption(selection){    
-      console.log(selection);
-      let addMachineName = document.getElementById("newMachine");
-      if(selection === "New Machine"){
-        addMachineName.classList.remove("hidetillneeded");
-      }else{
-      addMachineName.classList.add("hidetillneeded");
-        
-      }
-    } 
-  </script>
-
-<?!= include('Stylesheet'); ?>
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <title>Luke's Logging App</title>
+  <?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?>
+  
 </head>
+<script>
+  window.addEventListener('load', function() {
+  console.log('Page is loaded');
+   document.getElementById("customerSelect").focus();
+  });
+</script>
+
 <body>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header">
@@ -74,18 +27,29 @@
       </div>
     </header>
     <main class="mdl-layout__content">
-      <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
-         <div class="mdl-shadow--4dp mdl-cell mdl-cell--16-col mdl-cell--4-col-phone" >
+      <div class="content-grid mdl-grid">
+        <div class="content-column mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
+        <div class="content-column mdl-shadow--4dp mdl-cell mdl-cell--16-col mdl-cell--4-col-phone mdl-cell--top">
           <div class="mdl-card__title">
             <h2 class="mdl-card__title-text">Add a Log Entry</h2>
           </div>
-            <!-- MDL Spinner Component -->
-          <div id="spinner" class="mdl-spinner mdl-js-spinner"></div>
-          <div id="output"></div>
-          <br>
+          <div>
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="addOrderDate">
+              <span class="mdl-checkbox__label">Add older Record?</span>
+              <input type="checkbox" id="addOrderDate" class="mdl-checkbox__input">
+            </label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder" id="orderDateField">
+              <label class="mdl-textfield__label" for="orderDate">Date of record</label>
+              <input class="mdl-textfeild__input" type="date" id="orderDate" name="orderDate"/>  
+          </div>
+          <!--  Material spinner element removed until functionality can be tested--> 
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <select class="selectName mdl-textfield__input" onchange="GotCustomer(this.value)" id="customerSelect" name="customerSelect">
+            <label class="mdl-textfield__label" for="workOrder">Work Order:</label>
+            <input class="mdl-textfield__input" type="text" id="workOrder"  name="workOrder"/>  
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="selectName mdl-textfield__input" onchange="gotCustomer(this.value)" id="customerSelect" name="customerSelect">
               <option></option>
                 <? for (var i = 0; i<data.length; i++ ) { ?>
                   <option value="<?= data[i] ?>"><?=data[i]?>
@@ -94,27 +58,25 @@
             </select>
             <label class="mdl-textfield__label" for="customerSelect">Choose an Customer</label>
           </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hidetillneeded" id="newCustomer">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newCustomer">
             <label class="mdl-textfield__label" for="customerName">Customer Name</label>
             <input class="mdl-textfield__input" type="text" id="customerName" name="customerName"/>
           </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hidetillneeded" id="selectMachine">
-            <select class="mdl-textfield__input machineSelect" id="machineSelect" name="machineSelect" onChange="CheckOption(this.value)">
-              <option value=""></option>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="selectMachine" name="selectMachine">
+            <select class="mdl-textfield__input machineSelect" id="machineSelect" name="machineSelect" onChange="checkOption(this.value)">
+              <option id="default" value=""></option>
               <option id="pleaseSelect" value="pleaseSelect">Please select a customer first</option>
               <option id="New Machine" value="New Machine">New Machine</option>
             </select>
             <label class="mdl-textfield__label" for="machineSelect">Choose a machine</label>
           </div>
           <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hidetillneeded" id="newMachine">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newMachine">
             <label class="mdl-textfield__label" for="machineName">Machine Name:</label>
             <input class="mdl-textfield__input" type="text" id="machineName" name="machineName"/>
           </div>
           <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" >
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <label class="mdl-textfield__label" for="logEntry">Log Entry:</label>
             <input class="mdl-textfield__input" type="text" id="logEntry" name="logEntry"/>
           </div>
@@ -124,27 +86,24 @@
             <input class="mdl-textfield__input" type="number" id="totalHours" name="totalHours" step="0.25"/>
           </div>
           <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <label class="mdl-textfield__label" for="workOrder">Work Order:</label>
-            <input class="mdl-textfield__input" type="text" id="workOrder"  name="workOrder"/>
-          </div>
+          <div id="output" >
+            </div>
           <div>
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="logButton" onclick="handleFormSubmit()">Submit</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="logButton" onclick="handleFormSubmit()">Submit</button>
           </div>
-          <br>
-          <br>
+            <br>
+            <br>
           <div>
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="EmailButton" onclick="EmailSheet()">Email Log Sheet</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="EmailButton" onclick="EmailSheet()">Email Log Sheet</button>
           </div>
           <br>
         </div><!-- mdl-cell -->
-        <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
+        <div class="content-column mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
       </div><!-- mdl-grid -->
     </main>
   </div>
-  <?!= include('JavaScript'); ?>
+  <!-- Add the JavaScript  -->
+  <?!= HtmlService.createHtmlOutputFromFile('JavaScript').getContent(); ?>
 </body>
-  
-
 </html>
  
