@@ -14,7 +14,7 @@
 <script>
   window.addEventListener('load', function() {
   console.log('Page is loaded');
-   document.getElementById("customerSelect").focus();
+   document.getElementById("workOrder").focus();
   });
 </script>
 
@@ -26,28 +26,30 @@
         <div class="mdl-layout-spacer"></div>
       </div>
     </header>
+
     <main class="mdl-layout__content">
       <div class="content-grid mdl-grid">
         <div class="content-column mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
         <div class="content-column mdl-shadow--4dp mdl-cell mdl-cell--16-col mdl-cell--4-col-phone mdl-cell--top">
           <div class="mdl-card__title">
             <h2 class="mdl-card__title-text">Add a Log Entry</h2>
-          </div>
-          <div>
-            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="addOrderDate">
-              <span class="mdl-checkbox__label">Add older Record?</span>
-              <input type="checkbox" id="addOrderDate" class="mdl-checkbox__input">
-            </label>
-          </div>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder" id="orderDateField">
-              <label class="mdl-textfield__label" for="orderDate">Date of record</label>
-              <input class="mdl-textfeild__input" type="date" id="orderDate" name="orderDate"/>  
-          </div>
+          </div>          
           <!--  Material spinner element removed until functionality can be tested--> 
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <label class="mdl-textfield__label" for="workOrder">Work Order:</label>
             <input class="mdl-textfield__input" type="text" id="workOrder"  name="workOrder"/>  
           </div>
+          <br>
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="addDateCheck">
+            <input type="checkbox" id="addDateCheck" class="mdl-checkbox__input" onclick="addOrderDateField(this, this.value)">
+            <span class="mdl-checkbox__label">Add Work Order Date?</span>
+          </label>
+          <br>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder hideTillNeeded" id="orderDateField">
+            <label class="mdl-textfield__label" for="orderDate">Defaut is Day of Form submission</label>
+            <input class="mdl-textfield__input" type="date" id="orderDate" name="orderDate"/>  
+          </div>
+          <br>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <select class="selectName mdl-textfield__input" onchange="gotCustomer(this.value)" id="customerSelect" name="customerSelect">
               <option></option>
@@ -63,7 +65,7 @@
             <input class="mdl-textfield__input" type="text" id="customerName" name="customerName"/>
           </div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="selectMachine" name="selectMachine">
-            <select class="mdl-textfield__input machineSelect" id="machineSelect" name="machineSelect" onChange="checkOption(this.value)">
+            <select class="mdl-textfield__input machineSelect" id="machineSelect" name="machineSelect" onchange="checkOption(this.value)">
               <option id="default" value=""></option>
               <option id="pleaseSelect" value="pleaseSelect">Please select a customer first</option>
               <option id="New Machine" value="New Machine">New Machine</option>
@@ -79,6 +81,21 @@
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <label class="mdl-textfield__label" for="logEntry">Log Entry:</label>
             <input class="mdl-textfield__input" type="text" id="logEntry" name="logEntry"/>
+          </div>
+          <br>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="selectCategory mdl-textfield__input" onchange="checkOption(this.value)" id="categorySelect" name="categorySelect">
+              <option></option>
+                <? for (var j = 0; j<cat.length; j++ ) { ?>
+                  <option value="<?= cat[j] ?>"><?=cat[j]?>
+                  </option>
+                <? } ?>
+            </select>
+            <label class="mdl-textfield__label" for="categorySelect">Choose a Category</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newCategory">
+            <label class="mdl-textfield__label" for="categoryName">New Category</label>
+            <input class="mdl-textfield__input" type="text" id="categoryName" name="categoryName"/>
           </div>
           <br>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

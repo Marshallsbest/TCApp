@@ -1,6 +1,6 @@
 
 
-function EmailCurrentSheet() {
+function emailCurrentSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const my = new Information();
   let weekName = getMonday();

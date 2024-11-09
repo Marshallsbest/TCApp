@@ -104,3 +104,18 @@ console.log("Machines are: " + machines);
 // console.log("Updated Customer List = ");
 //   UpdateCustomerList(newCustomers)
 // }
+
+
+/**
+ * Test function to run getFolderByName_.
+ * @prints a Google Drive FolderId.
+ */
+function test_getFolderByName() {
+
+  // Gets the PDF folder in Drive.
+  const folder = getFolderByName_(OUTPUT_FOLDER_NAME);
+
+  console.log(`Name: ${folder.getName()}\rID: ${folder.getId()}\rDescription: ${folder.getDescription()}`)
+  // To automatically delete test folder, uncomment the following code:
+  // folder.setTrashed(true);
+}

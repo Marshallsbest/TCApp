@@ -3,7 +3,9 @@
  */
 function getWeeklySheet(weekName){
   let ss = SpreadsheetApp.getActiveSpreadsheet();
+  let template = ss.getSheetByName("Template");
   let name = getMonday(weekName);
+  
   let s;
   if(ss.getSheetByName(name)){  
       s = ss.getSheetByName(name)
@@ -14,21 +16,7 @@ function getWeeklySheet(weekName){
  return s;
 };
 
-/**
- * Call that Calculates the Monday of the current week no matter the day it actually is
- */
 
-function getMonday(dateInWeek){
-  console.log("New Date looks like: "+new Date)
-  console.log("My Date looks like: "+dateInWeek)
-  let d = dateInWeek ? dateInWeek : new Date;
-  let newD = dateInWeek ? dateInWeek : new Date;
-  let day = d.getDay();
-  let diff = day + (day == 0 ? 6:-1);   
-  newD.setDate(newD.getDate() - diff);
-  let dateAsName = Utilities.formatDate(newD,"GMT-0400","MMM dd yyyy");
-  return dateAsName; 
-};
 
 /**
  * This Inserts the headers into a new weeks log sheet
@@ -75,9 +63,9 @@ function FormatHeaders() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var s = ss.getActiveSheet();
   ss.getActiveSheet().setRowHeight(1, 64);
-  s.getRange(1, 1, 2, s.getMaxColumns()).activate();
-  ss.getActiveRangeList().setBackground('#38761d')
-  .setFontColor('#ffe599')
+  s.getRange(1, 1, 2, 7).activate();
+  ss.getActiveRangeList().setBackground(ss.getRangeByName("HEADER_BACKGROUND_COLOUR").getValue())
+  .setFontColor(ss.getRangeByName("HEADER_FONT_COLOUR").getValue())
   .setHorizontalAlignment('center')
   .setFontWeight('bold');
   ss.getActiveSheet().setHiddenGridlines(true);
@@ -86,6 +74,7 @@ function FormatHeaders() {
   // s.getRange(1,c,1000,maxC).getCol
   let infoRange = s.getRange(s.getLastRow()+1,1,s.getMaxRows(),s.getLastColumn());
   infoRange.activate().setFontSize(14).setFontFamily("Arial");
+  let imageRange = s.getRange(1,1).activate().setBackground("white");
 };
 
 
@@ -183,3 +172,31 @@ function addLogSheet(logSheet,sheet){
     }
   ss.getSheetByName(logSheet).hideSheet()  
   }
+
+  function getDataForTImeSheet(weekNum){
+    let ss = SpreadsheetApp.getActiveSpreadsheet();
+    let ls = ss.getSheetByName()
+
+  }
+
+
+  function getThisYearsLogSheet(){
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let yearSheet;
+    let currentYear = new Date().getUTCFullYear().toString();
+      console.log("Full Year: "+currentYear);
+    let dataArchive = currentYear+" Logs";
+      console.log(dataArchive)
+    if(ss.getSheetByName(dataArchive)){
+      console.log("Yearsheet is found")
+    }else{
+    console.log("YearSheet wasn't foundt should be created now")
+    ss.insertSheet(dataArchive);
+    addHeaders(dataArchive);
+      
+    }
+  yearSheet = ss.getSheetByName(dataArchive);
+      
+  return yearSheet
+  }
+  

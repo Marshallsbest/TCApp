@@ -162,3 +162,15 @@ function PrepSheettoprint() {
   sheet.getRange(1, spreadsheet.getCurrentCell().getColumn() + 3, sheet.getMaxRows(), 1).activate();
   spreadsheet.getActiveRangeList().setHorizontalAlignment('right');
 };
+
+function getWeek() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-1, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+};
+
+function Weeknum() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getCurrentCell().setValue('')
+  .setFormulaR1C1('=WEEKNUM(R[0]C[1])');
+};

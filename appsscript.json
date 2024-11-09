@@ -1,98 +1,133 @@
 {
   "timeZone": "America/Toronto",
   "dependencies": {
-    "enabledAdvancedServices": [{
-      "userSymbol": "Drive",
-      "serviceId": "drive",
-      "version": "v3"
-    }, {
-      "userSymbol": "Gmail",
-      "serviceId": "gmail",
-      "version": "v1"
-    }, {
-      "userSymbol": "Docs",
-      "serviceId": "docs",
-      "version": "v1"
-    }, {
-      "userSymbol": "Sheets",
-      "serviceId": "sheets",
-      "version": "v4"
-    }]
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Drive",
+        "serviceId": "drive",
+        "version": "v3"
+      },
+      {
+        "userSymbol": "Gmail",
+        "serviceId": "gmail",
+        "version": "v1"
+      },
+      {
+        "userSymbol": "Docs",
+        "serviceId": "docs",
+        "version": "v1"
+      },
+      {
+        "userSymbol": "Sheets",
+        "serviceId": "sheets",
+        "version": "v4"
+      }
+    ]
   },
   "webapp": {
-    "access": "ANYONE_ANONYMOUS",
-    "executeAs": "USER_DEPLOYING"
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
   },
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8",
   "sheets": {
-    "macros": [{
-      "menuName": "FormatHeaders",
-      "functionName": "FormatHeaders"
-    }, {
-      "menuName": "Format Date",
-      "functionName": "FormatDate"
-    }, {
-      "menuName": "FormatDay",
-      "functionName": "FormatDay"
-    }, {
-      "menuName": "Insert Image",
-      "functionName": "InsertImage"
-    }, {
-      "menuName": "addFormatImage",
-      "functionName": "addFormatImage"
-    }, {
-      "menuName": "Title",
-      "functionName": "Title"
-    }, {
-      "menuName": "Totalling Hours",
-      "functionName": "TotallingHours"
-    }, {
-      "menuName": "Delete Columns",
-      "functionName": "DeleteColumns"
-    }, {
-      "menuName": "Testing Named ranges",
-      "functionName": "TestingNamedranges"
-    }, {
-      "menuName": "Test names 2",
-      "functionName": "Testnames2"
-    }, {
-      "menuName": "delete empty columns and rows",
-      "functionName": "deleteemptycolumnsandrows"
-    }, {
-      "menuName": "Downloading sheet",
-      "functionName": "Downloadingsheet"
-    }, {
-      "menuName": "Copy to new ",
-      "functionName": "Copytonew"
-    }, {
-      "menuName": "Copy to new Sheet",
-      "functionName": "CopytonewSheet"
-    }, {
-      "menuName": "Formatting the logsheet",
-      "functionName": "Formattingthelogsheet",
-      "defaultShortcut": "Ctrl+Alt+Shift+2"
-    }, {
-      "menuName": "More Formatting",
-      "functionName": "MoreFormatting",
-      "defaultShortcut": "Ctrl+Alt+Shift+3"
-    }, {
-      "menuName": "Pasting Sum ",
-      "functionName": "PastingSum"
-    }, {
-      "menuName": "getShet",
-      "functionName": "getShet"
-    }, {
-      "menuName": "trim Sheet",
-      "functionName": "trimSheet",
-      "defaultShortcut": "Ctrl+Alt+Shift+9"
-    }, {
-      "menuName": "Formatting a sheet",
-      "functionName": "Formattingasheet",
-      "defaultShortcut": "Ctrl+Alt+Shift+2"
-    }, {
-      "menuName": "Prep Sheet to print",
-      "functionName": "PrepSheettoprint"
-    }]
+    "macros": [
+      {
+        "menuName": "FormatHeaders",
+        "functionName": "FormatHeaders"
+      },
+      {
+        "menuName": "Format Date",
+        "functionName": "FormatDate"
+      },
+      {
+        "menuName": "FormatDay",
+        "functionName": "FormatDay"
+      },
+      {
+        "menuName": "Insert Image",
+        "functionName": "InsertImage"
+      },
+      {
+        "menuName": "addFormatImage",
+        "functionName": "addFormatImage"
+      },
+      {
+        "menuName": "Title",
+        "functionName": "Title"
+      },
+      {
+        "menuName": "Totalling Hours",
+        "functionName": "TotallingHours"
+      },
+      {
+        "menuName": "Delete Columns",
+        "functionName": "DeleteColumns"
+      },
+      {
+        "menuName": "Testing Named ranges",
+        "functionName": "TestingNamedranges"
+      },
+      {
+        "menuName": "Test names 2",
+        "functionName": "Testnames2"
+      },
+      {
+        "menuName": "delete empty columns and rows",
+        "functionName": "deleteemptycolumnsandrows"
+      },
+      {
+        "menuName": "Downloading sheet",
+        "functionName": "Downloadingsheet"
+      },
+      {
+        "menuName": "Copy to new ",
+        "functionName": "Copytonew"
+      },
+      {
+        "menuName": "Copy to new Sheet",
+        "functionName": "CopytonewSheet"
+      },
+      {
+        "menuName": "Formatting the logsheet",
+        "functionName": "Formattingthelogsheet",
+        "defaultShortcut": "Ctrl+Alt+Shift+2"
+      },
+      {
+        "menuName": "More Formatting",
+        "functionName": "MoreFormatting",
+        "defaultShortcut": "Ctrl+Alt+Shift+3"
+      },
+      {
+        "menuName": "Pasting Sum ",
+        "functionName": "PastingSum"
+      },
+      {
+        "menuName": "getShet",
+        "functionName": "getShet"
+      },
+      {
+        "menuName": "trim Sheet",
+        "functionName": "trimSheet",
+        "defaultShortcut": "Ctrl+Alt+Shift+9"
+      },
+      {
+        "menuName": "Formatting a sheet",
+        "functionName": "Formattingasheet",
+        "defaultShortcut": "Ctrl+Alt+Shift+2"
+      },
+      {
+        "menuName": "Prep Sheet to print",
+        "functionName": "PrepSheettoprint"
+      },
+      {
+        "menuName": "getWeek",
+        "functionName": "getWeek"
+      },
+      {
+        "menuName": "Weeknum",
+        "functionName": "Weeknum"
+      }
+    ]
   }
 }

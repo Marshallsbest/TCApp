@@ -59,24 +59,17 @@ function UpdateCustomerList(company){
     if(!newList.find((item) => item == oneCustomer)){
       newList.unshift(oneCustomer);
     }
-  } else{ 
+  }else{ 
       newCustomers.forEach(function(customer){
       if(!newList.find((item) => item == customer)){
-        newList.unshift(customer)}})
-  };
-  // console.log("New List before Transposing"+newList);
-  let newListArr = _transposeArray(newList)
-  // console.log("NewListArr is newList Transposed:");
-  // console.log(newListArr);
-  // console.log("newListArr.length Call after this  Log : ");
-  let numRows = newListArr.length;
-  // console.log(numRows);
-  r.clear;
-  r = ds.getRange(2,1,numRows,1);
-  r.setValues(newListArr);
-  ss.setNamedRange('CUSTOMER_NAMES',r);
+        newList.unshift(customer)
+        }
+      }
+    )
+   ss.setNamedRange('CUSTOMER_NAMES',r);
   return newList
-}
+  }
+};
 
 /**
  * Gets the machines associated with the chosen customer

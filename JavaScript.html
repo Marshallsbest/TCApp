@@ -63,18 +63,20 @@
 
   
   function clearForm(){
-    const one = document.getElementById("customerSelect");
-    const two = document.getElementById("customerName");
-    const three = document.getElementById("machineSelect");
-    const four = document.getElementById("machineName");
-    const five = document.getElementById("logEntry");
-    const six = document.getElementById("totalHours");
-    const seven = document.getElementById("workOrder");
-    const eight = document.getElementById("addOrderDate");
-    const nine = document.getElementById("orderDate");
-    let feilds = [one,two,three,four,five,six,seven,eight,nine];
+    const addDat = document.getElementById("addDateCheck").unCheck();
+    const worOrd = document.getElementById("workOrder");
+    const orDat = document.getElementById("orderDate");
+    const cusSel = document.getElementById("customerSelect");
+    const cusNam = document.getElementById("customerName");
+    const macSel = document.getElementById("machineSelect");
+    const macNam = document.getElementById("machineName");
+    const logEnt = document.getElementById("logEntry");
+    const catSel = document.getElementById("categorySelect");
+    const catName = document.getElementById("categoryName");
+    const totHrs = document.getElementById("totalHours");
+    let fields = [worOrd,orDat,cusSel,cusNam,macSel,macNam,logEnt,catSel,catNam,totHrs];
 
-    feilds.forEach((field) => (field.value=""));
+    fields.forEach((field) => (field.value=""));
     document.getElementById("logButton").disabled=false;
     return;
   };
@@ -103,22 +105,26 @@
     console.log("This Log is after the form object log");
     document.getElementById("logButton").disabled=true;
     document.getElementById("output").innerHTML="processing...";
-    let addDate = document.getElementById("addOrderDate").value;
+    let addDate = document.getElementById("addDateCheck").value;
     let orderDate = document.getElementById("orderDate").value;
     let customerSelect = document.getElementById("customerSelect").value;
     let customerName = document.getElementById("customerName").value;
     let machineSelect = document.getElementById("machineSelect").value;
     let machineName = document.getElementById("machineName").value;
     let logEntry = document.getElementById("logEntry").value;
+    let category = document.getElementById("categorySelect").value;
+    let newCategory = document.getElementById("categoryName").value;
     let hours = document.getElementById("totalHours").value;
     let order = document.getElementById("workOrder").value;
     let formObject = {
           addDateCheck:addDate,
-          dateOfOrder: orderDate,
+          dateOfOrder:orderDate,
           customerSelect:customerSelect,
           customerName:customerName,
           machineSelect:machineSelect,
           machineName:machineName,
+          categorySelect:category,
+          newCategory:newCategory,
           logEntry:logEntry,
           totalHours:hours,
           workOrder:order,
@@ -154,10 +160,21 @@
 <script>
   function checkOption(selection){    
     console.log(selection);
-    let addMachineName = document.getElementById("newMachine");
     if(selection === "New Machine"){
+      let addMachineName = document.getElementById("newMachine");
       addMachineName.classList.remove("hideTillNeeded");
+    }else if(selection === "New Customer"){
+      let addCustomerName = document.getElementById("newCustomer");
+      addCustomerName.classList.remove("hideTillNeeded");
+    }else if(selection === "New Category"){
+      let addCategoryName = document.getElementById("newCategory");
+      addCategoryName.classList.remove("hideTillNeeded");
     }else{
+      let addCustomerName = document.getElementById("newCustomer");
+      addCustomerName.classList.add("hideTillNeeded"); 
+      let addCategoryName = document.getElementById("newCategory");
+      addCategoryName.classList.add("hideTillNeeded"); 
+      let addMachineName = document.getElementById("newMachine");
       addMachineName.classList.add("hideTillNeeded"); 
     };
   };
@@ -189,17 +206,42 @@
       };
     };
 </script>
-  <script>
+<script>
+  function gotCategory(category){
+    console.log("Select Box change Heard and function will be called with the value of:")
+    console.log(category);
+    let addCatName = document.getElementById("newCategory").classList;
+    let selectCat = document.getElementById("categorySelect").classList;
+    let selectName = document.getElementById("categorySelect");
+        category = selectName.value;
+        console.log(category);
+      if(category === "New Category"){
+        addCatName.remove("hideTillNeeded");
+        selectCat.add("hideTillNeeded");
+        console.log("Category needed wasnt found Asking for new Category");
+      }else {
+        console.log("This is the passed value before getting it from element: "+customer);
+        category = selectName.value;    
+        console.log(category);
+        selectMachine.remove("hideTillNeeded");
+        addCustomerName.add("hideTillNeeded");
+        addMachineName.add("hideTillNeeded");
+        document.getElementById("machineSelect").remove(machineSelect.pleaseSelect);
+        google.script.run.withSuccessHandler(gotMachines).withFailureHandler(noMachines).GetMachines(customer); 
+      };
+    };
+</script>
+<script>
   function setFocusToTextBox(){
     document.getElementById("customerSelect").focus();
   };
 
   function EmailSheet(){
     addSpinner('is-active');
-    google.script.run.withSuccessHandler(EmailSuccess).withFailureHandler(EmailFailure).EmailCurrentSheet();
+    google.script.run.withSuccessHandler(emailSuccess).withFailureHandler(emailFailure).emailCurrentSheet();
   };
 
-  function EmailSuccess(message){
+  function emailSuccess(message){
     let ss = SpreadSheetApp.getActiveSpreadsheet();
     clearForm();
     let div = document.getElementById("output");
@@ -210,36 +252,42 @@
   removeSpinner('is-active');
   };
 
-  function EmailFailure(message){
+  function emailFailure(message){
     console.log("Failure to Send Email"+ message)
   removeSpinner('is-active');
   };
 
-  // function addDateField(){
-  //   let checkBox = document.getElementById("addOrderDate");
-  // // Get the output text
-  //   let addDate = document.getElementById("orderDateField");
-
-  // // If the checkbox is checked, display the output text
-  //   if (checkBox.checked == true){
-  //     addDate.classList.remove("hideTillNeeded");
-  //   }else{
-  //     addDate.classList.add("hideTillNeeded"); 
-  //   };
-  // }
-  const addOrderDateCheckBox = document.querySelector("#addOrderDate");
-  const orderDateInput = document.querySelector("#orderDateField");
-  orderDateInput.style.visibility = "hidden";
+  function addOrderDateField(dateBox){
+    console.log("addOrderDateFeild Called");
+    console.log(dateBox);
+    console.log(dateBox.checked)
+    let checkBox = document.getElementById("addOrderDate");
+    let addDate = document.getElementById("orderDateField");
+    if (dateBox.checked == true){
+      console.log("dateBox evaluated to true");
+      addDate.classList.remove("hideTillNeeded");
+    }else{
+      console.log("dateBox evaluated to false");
+      addDate.classList.add("hideTillNeeded"); 
+    };
+  }
   
-  addOrderDateCheckBox.addEventListener("change", () => {
-      if(addOrderDateCheckBox.checked){
-        console.log("Checkbox listener function has been triggered! and evaluates TRUE");
-        orderDateInput.style.visibility = "visible"; 
-      } else {
-        orderDateInput.style.visibility = "hidden";
-        console.log("Checkbox listener function has been triggered! and evaluates FALSE");
-      }
-    }
-  );
+  // const addOrderDateCheckBox = document.querySelector("#addDateCheck");
+  // const orderDateInput = document.querySelector("#orderDateField");
+  // orderDateInput.style.visibility = "hidden";
+  
+  // addOrderDateCheckBox.addEventListener("change", () => {
+  //   let addDate = document.getElementById("orderDateField");
+  //     if(addOrderDateCheckBox.checked){
+  //       addDate.classList.remove("hideTillNeeded")
+  //       console.log("Checkbox listener function has been triggered! and evaluates TRUE");
+  //       orderDateInput.style.visibility = "visible"; 
+  //     } else {
+  //       addDate.classList.add("hideTillNeeded");
+  //       orderDateInput.style.visibility = "hidden";
+  //       console.log("Checkbox listener function has been triggered! and evaluates FALSE");
+  //     }
+  //   }
+  // );
   console.log("Javescript has been evaluated to the bottom of the page!");
 </script>
