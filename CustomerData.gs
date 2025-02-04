@@ -1,9 +1,9 @@
 /**
 * Returns a 2 dimensional array of names for use in a menu
 */
-function CustomerNames(){
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  let customerNames = ss.getRangeByName('CUSTOMER_NAMES').getDisplayValues();
+function customerNames(){
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const customerNames = ss.getRangeByName("CUSTOMER_NAMES").getValues();
     // console.log(customerNames.map(function(name){if(name != ''){return name}}));
     // let customerList = customerNames.filter((customerName) => customerName[0].length > 0)
     // console.log(customerNames)
@@ -16,27 +16,12 @@ function CustomerNames(){
  *  Customer Selection list
  *  
  */
-function CustomerSelectionList(){
-  let customerList = CustomerNames();
+function customerSelectionList(){
+  let customerList = customerNames();
   customerList.unshift("New Customer");
   // console.log(customerList)
   return customerList
 }
-/**
- * Gets the names of the days customers and updates the list
- */
-
-function DailyCustomerList(orderWeek){
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  let ls = orderWeek? ss.getSheetByName(getMonday(orderWeek)) : ss.getActiveSheet().activate();
-  let nameList = ls.getRange(4,3,ls.getLastRow()-3,1).getValues();
-  // console.log("Name List before filter: ");
-  // console.log(nameList);
-  let names = _getUniqueList(nameList);
-  //  console.log("_getUniqueList complete,");
-  //  console.log("Returning names from DailyCustomerList"+names);
-  return names 
-};
 
 /**
  * Merges company name List with new name list
@@ -44,30 +29,30 @@ function DailyCustomerList(orderWeek){
  * @param {array} company   
  * @return {array}
  */
-function UpdateCustomerList(company){
-  let oneCustomer = company;
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  let ds = ss.getSheetByName('Data');
+function updateCustomerList(company,asset){
+  console.log("updateCustomerList was called with the company: "+company )
+  let oneCustomer = capitalize(company);
+  let oneAsset = capitalize(asset);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let ds = ss.getSheetByName('CUSTOMER_DATA');
   let r = ss.getRangeByName('CUSTOMER_NAMES'); 
-  let newCustomers = DailyCustomerList();
-  let newList = CustomerNames();
+  let newList = customerNames();
   // let oldList = CustomerNames();
   // for(let i = 0;i<newCustomers.length;i++){
   //   newList.unshift(newCustomers[i])
   // }
-  if(oneCustomer){
-    if(!newList.find((item) => item == oneCustomer)){
-      newList.unshift(oneCustomer);
-    }
-  }else{ 
-      newCustomers.forEach(function(customer){
-      if(!newList.find((item) => item == customer)){
-        newList.unshift(customer)
-        }
-      }
-    )
-   ss.setNamedRange('CUSTOMER_NAMES',r);
-  return newList
+  try{
+    if(newList.indexOf(oneCustomer) < 0){
+      console.log("New List .index of "+oneCustomer+" was found to be -1 so new customer will be appended to the sheet");
+      ds.appendRow([oneCustomer,oneAsset]);
+      r = ds.getRange(2,1,ds.getLastRow(),1);
+    };
+     
+    ss.setNamedRange('CUSTOMER_NAMES',r);
+    return oneCustomer
+  }catch(err){
+
+    return err 
   }
 };
 
@@ -77,161 +62,168 @@ function UpdateCustomerList(company){
  */
 
 function GetMachines(name){
-
+  
   let assetList = [];
   if(name === "New Customer"){
     assetList.unshift("It's sending New Customer");
     return assetList
   } else {
-    assetList = GetClientAssetList(name);
+    assetList = getClientAssetList(name);
    }
   console.log(assetList);
-  if(assetList.indexOf(name)>=0){
-    assetList.shift();}
-    assetList.push("New Machine")
-    assetList.unshift('');
-  console.log(assetList);
+  // if(assetList.indexOf(name)>=0){
+  //   assetList.shift();}
+  //   assetList.push("New Machine")
+  //   assetList.unshift('');
+  // console.log(assetList);
   return assetList
   }
 
-/**
- * This should return a list of all machines shown to the 
- * right of the company name on the Data page
- */
-
-function DailyMachineList(name){
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  let logSheet = ss.getSheetByName(getMonday());
-  let machList = logSheet.getRange(4,3,logSheet.getLastRow()-3,2).getValues();
-// console.log(nameList)
-  let machines = machList.filter((name) => name.toString.length>0);
-// console.log("name : "+names);
-// console.log(names);
-  return machines 
-}
 
 /**
- * Update the Customers Machine list
+ * function: GetClientAssetList
+ *  @param{string} name the name of the customer to besearched for in the list  
+ *  @return{array} assetList An array of all the data in the row that has the name matched in the first column
  */
-function UpdateCustomersMachines(customer, machine){
-  // console.log(customer)
-  let cusName = customer;
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  let ds = ss.getSheetByName('Data');
-  // console.log(cusName);
-  let machines = GetClientAssetList(cusName);
-  // console.log(machines);
-  machines.push(machine)
-  let range = ss.getRangeByName('CUSTOMER_MACHINES').getDisplayValues();
-  let position;
-  for(let i=0;i<range.length;i++){
-   if(range[i].indexOf(machines[0])>=0){
-   position = i+2;}
-  };
-  let values = [];
-  values.push(machines)
-  // console.log(position);
-  // console.log(values);
-  let length = machines.length;
-  // console.log(length);
-  ds.getRange(position,3,1,length).setValues(values)
-  }
-
-/**
- * returns the row index of the customer data
- */
-function GetCusRecords(customer,machine){
-  // console.log(customer)
-  let ss = SpreadsheetApp.getActiveSpreadsheet(); 
-  let dataSheet = ss.getSheetByName('Data');
-  let nameRange = ss.getRangeByName('CUSTOMER_NAMES')
-  let names = nameRange.getDisplayValues();
-  // console.log("names: "+names);
-  // console.log("names.length: "+names.length);
-  // console.log("customer.name: "+customer.name)
-  let customerList = names.filter((name) => name[0].length > 0);
-  // console.log(customerList);
-  let row = customerList.findIndex((cust) => cust[0] === customer.name);
-  // console.log("row: "+row);
-  let lastCol = customer.machines.length + 1;
-  if(row >= 0){
-    customer.row = row+2
-    let machines = dataSheet.getRange(customer.row,2,1,lastCol).getDisplayValues()
-    let machList = machines.filter((machineName) => machineName[0].length > 0)
-    machList[0].unshift(machine);
-    machList[0].unshift(customer.name);
-    // console.log("machList "+machList);
-    customer.column = machList[0].length;
-    customer.machines = new Array(machList[0])
-    // console.log(customer)
-  };
-  let newMachRange = dataSheet.getRange(customer.row,1,1,customer.column)  
-    newMachRange.setValues(customer.machines);
-  
-  return customer
-}
-
-function GetClientAssetList(name){
-
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-  let ds = ss.getSheetByName('Data');
-  name = name.trim();
-  let cusRecords = ss.getRangeByName('CUSTOMER_MACHINES');
-  let customerData = cusRecords.getValues();
-  console.log(customerData);
-  let machines = [];
-  try{for(let i=1;i<customerData.length;i++) {
-        if(customerData[i][0] === name){
-            machines.push(customerData[i]);
-        };
-      };
-    }catch{
-    let message = "Failure at the array building the data given is "+customerData;  
-    return message
-    }
-  let assetList = _getUniqueList(machines);
+function getClientAssetList(name){
+  let customerName = capitalize(name);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ds = ss.getSheetByName('CUSTOMER_DATA');
+  console.log("getClientAssetList Called name is: "+customerName)
+  const cRow = getCustomerRow(customerName)  
+  console.log("cRow is : "+cRow)
+  let machines = ds.getRange(cRow,2,1,ds.getLastColumn()).getValues();
+  machines = _popNames(machines)
+  console.log("Machines after _pop : ")
+  console.log(machines)
+  let assetList = _removeEmpty(machines);
   console.log("after Get Unique List");
-  console.log(assetList[0])
-  
+  console.log(assetList)
   return assetList
 }
 
-/**
- * Gets a property from the specified property table 
- * @ 
- * @param {string} propType
- * 
- */
-function dataStore(func,propType,key,value){
-  // Set a property in each of the three property stores.
-  let property;
-  if(propType == "script"){
-  property = PropertiesService.getScriptProperties();}
-  else if(propType == "user"){
-  property = PropertiesService.getUserProperties();}
-  else if(propType == "doc"){
-  property = PropertiesService.getDocumentProperties();
-  };
-  if(func == "get" ){
-    try{
-      property.getProperty(key,
-          value);
-    } catch (err) {
-      // TODO (developer) - Handle exception
-      let errInfo = 'Failed with error %s '+ err.message;
-      console.log(errInfo);
-      return errInfo
-    }
-  }
-    if(func == "set"){
-      try{
-      property.setProperty(key,value);
-    } catch (err) {
-      // TODO (developer) - Handle exception
-      let errInfo = 'Failed with error %s '+ err.message;
-      console.log(errInfo);
-      return errInfo
-    }
-  }
-
+function testGetAssetList(){
+  getClientAssetList("Brampton Senior center")
 }
+/**
+ * function: DailyMachineList - 
+ * @param{string} name 
+ */
+
+function createMachineList(yearOfRecords){
+  yearOfRecords ? yearOfRecords : yearOfRecords = new Date().getFullYear()
+  const sheetName = yearOfRecords + " Logs";
+  console.log(sheetName);
+  const logSheet = ss.getSheetByName(sheetName);
+  const infoSheet = ss.getSheetByName("CUSTOMER_DATA");
+  // console.log(logSheet);
+  const customerDataRange = logSheet.getRange(3,4,logSheet.getLastRow()-3,2).getValues();
+  console.log("CustomerDataRange ");
+  console.log(customerDataRange);
+  const customerDatafiltered = customerDataRange.map(customersData => customersData.filter(data => data.valueOf().trim().length >2 && data !== "undefined"))
+  // console.log("filtered Data Begins Here");
+  // console.log(customerDatafiltered);
+  const reducedData =  reduceToPairs(customerDatafiltered);
+  // console.log("reducedData sorted ");
+  let machineWidth = reducedData.sort((a, b) => {
+    const keyA = a[0].toLowerCase(); // Convert to lowercase for case-insensitive comparison
+    const keyB = b[0].toLowerCase();
+    return keyA.localeCompare(keyB); // Compare keys alphabetically
+  });
+  // console.log(reducedData);
+  // console.log("machineRangeLength: "+machineRangeLength);
+  // console.log("reducedData ");
+  // console.log(reducedData);
+  let curCol = infoSheet.getMaxColumns();
+  const headerRange = infoSheet.getRange(1,1,infoSheet.getFrozenRows(),curCol).activate();
+  if(machineWidth+1 - curCol >0){
+    let neededCols = machineWidth+1 - curCol;
+    // console.log("Column Difference : "+neededCols);
+    infoSheet.insertColumnsAfter(curCol,neededCols +1);
+  }
+  headerRange.setBackground(THEME_BACKGROUND_COLOUR).setFontColor(THEME_FONT_COLOUR)
+  let headers = headerRange.getValues()
+  infoSheet.activate().clearContents();
+  reducedData.unshift(headers);
+ 
+  for(let i =0; i<reducedData.length; i++){
+    let row =[];
+    row.push(reducedData[i]);
+    // console.log("The row : ");
+    // console.log(row);
+    // console.log("The index: ");
+    // console.log(i);
+    let dataRow = i +1;
+    let data_Size = row[0].length ;
+    // console.log("The dataSize is: ");
+    // console.log(data_Size);
+    
+    infoSheet.getRange(dataRow,1,1,data_Size).activate().setValues(row)
+    }
+};
+
+function testCreateMachineList(){
+  createMachineList()
+}
+
+
+/**
+ * function: setClientAssetList
+ *  @param{string} name the name of the customer to besearched for in the list  
+ *  @param{array} a 1 dimensional array machines the machines to be saved in the row
+ *  @return{array} assetList An array of all the data in the row that has the name matched in the first column
+ */
+
+function addNewAsset(name,machine){
+  const curList = getClientAssetList(name);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ds = ss.getSheetByName('CUSTOMER_DATA');
+   console.log("name from addNewAsset Function): "+name)
+  name = name.trim();
+  const newMachine = capitalize(machine)
+  let check = 0;
+  if(newMachine.length == 1){
+    check = newMachine[0].length
+    if(check >= 1){
+      ds.getRange(getCustomerRow(name),2,1,check).setValues(newMachine)
+    }
+  };
+  console.log("old Asset List: "+ curList);
+  const newList = getClientAssetList(name);
+  console.log("new asset List: "+ newList);
+  return newMachine
+}
+
+function testAddNewAsset(){
+  addNewAsset("Yorkville Sound","Test Machine")
+}
+/**
+ * function getCustomerRow
+ * @param{string} name the name of the customer to find
+ */
+function getCustomerRow(name){
+  // const ss = SpreadsheetApp.getActiveSpreadsheet();
+  // let sheet = ss.getSheetByName("CUSTOMER_DATA");
+  let names = customerNames();
+  if(!name ){ 
+  return names.length + 2;
+  }
+  let index =  names.indexOf(name) 
+  let row = index<0 ? names.length + 2 : index+2;
+  // let names = sheet.getRange(2,1,sheet.getLastRow(),1).getValues();
+  return row
+
+  
+  // let row = null;
+  // name = capitalize(name);
+  // console.log("CUSTOMER_NAMES Being logged: "+names);
+  // for(let i=1;i<names.length;i++){
+  //   console.log(names[i][0]+"??=??"+name);
+  //   if(names[i][0] === name){
+      
+  //     row = i+2;
+  //     console.log("row of customer is: "+ row)
+  //     }
+
+    // };
+  }

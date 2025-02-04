@@ -1,26 +1,82 @@
 <style>
-    header .mdl-layout__header{
-      background-color: #10654b;
+ 
+  .mdl-layout__header{
+    background-color: #006747!important;
 
-    }
-    .mdl-cell{
-      vertical-align: middle;
-      padding:25px;
-      display: block;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
-      margin-inline-start: 1em;
-      margin-inline-end: 1em;
-    }
-    .div{
-      display: block;
+  }
 
+  .logo{
+    vertical-align: middle;
+    padding:5px;
+    display: flex;
+    overflow: hidden;
+    max-height: 80%;    
+    margin-right: 25px;
+  }
+
+  .mdl-card{
+    max-width: 90%
+    display: flex;
+    margin: auto;
+  }
+
+  .mdl-card > .mdl-card__title {
+    color: #fff;
+    height: 76px;
+    background-color: #006747;
+  }
+
+  .mdl-card__actions, .mdl-card--border{
+    padding:25px;
+  }
+
+  .mdl-card >  .mdl-card__menu {
+   color: #fff;
+  }
+
+  .mdl-textfield{
+    width:100%;
+    margin: 20px;
+  }
+
+  .mdl-switch__label{
+    color: grey;
+  } 
+  
+  .div{
+    display: block;
+  }
+
+  .mdl-layout-title{
+    color: white;
+  }
+  
+  .hideTillNeeded{
+    display: none;
+  }
+
+  .mdl-layout-spacer{
+    height: 25px;
+  }
+
+  .mdl-textfield__input{
+    max-width: 100%;
+    width: 90%;
+  }
+
+  .mdl-card--border{
+    border-top: 1px solid rgba(0, 0, 0, .1);
+
+  }
+
+  @media screen and (-webkit-min-device-pixel-ratio: 1.77) and (orientation:portrait) {
+     .mdl-card{
+      width: 100%;
     }
-    .mdl-layout-title{
-      color: white;
+    mdl-layou{
+      overflow: hidden;
+      width: 100vw;
     }
-    .hideTillNeeded{
-      display:none;
-    }
+  }
   </style>
 

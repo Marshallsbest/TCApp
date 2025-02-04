@@ -1,133 +1,125 @@
 <script type="text/javascript">
- 
-
-  //  function handleFormSubmit(){
-  //   console.log("This Log is after the form object log");
-  //   document.getElementById("logButton").disabled=true;
-  //   document.getElementById("output").innerhtml="processing";
-  //   let customerSelect = document.getElementById("customerSelect").value;
-  //   let customerName = document.getElementById("customerName").value;
-  //   let machineSelect = document.getElementById("machineSelect").value;
-  //   let machineName = document.getElementById("machineName").value;
-  //   let logEntry = document.getElementById("logEntry").value;
-  //   let hours = document.getElementById("totalHours").value;
-  //   let order = document.getElementById("workOrder").value;
-  //   let formObject = {
-  //         customerSelect:customerSelect,
-  //         customerName:customerName,
-  //         machineSelect:machineSelect,
-  //         machineName:machineName,
-  //         logEntry:logEntry,
-  //         totalHours:hours,
-  //         workOrder:order
-  //       };
-  //   console.log(formObject);
-  //   google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
-  // };
-  
-  // Loading animation 
-  // function handleFormSubmit(){
-  //   console.log("This Log is after the form object log");
-  //   document.getElementById("logButton").disabled=true;
-  //   document.getElementById("output").innerhtml="processing";
-  //   let customerSelect = document.getElementById("customerSelect").value;
-  //   let customerName = document.getElementById("customerName").value;
-  //   let machineSelect = document.getElementById("machineSelect").value;
-  //   let machineName = document.getElementById("machineName").value;
-  //   let logEntry = document.getElementById("logEntry").value;
-  //   let hours = document.getElementById("totalHours").value;
-  //   let order = document.getElementById("workOrder").value;
-  //   let formObject = {
-  //         customerSelect:customerSelect,
-  //         customerName:customerName,
-  //         machineSelect:machineSelect,
-  //         machineName:machineName,
-  //         logEntry:logEntry,
-  //         totalHours:hours,
-  //         workOrder:order
-  //       };
-  //   console.log(formObject);
-  //   google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
-  // };
-  
-  // function onSuccess(message){
-  //   console.log("I was called! ");
-  //   clearForm();
-  //   window.scrollTo(0,0); 
-  //   let div = document.getElementById("output");
-  //   let addAnother = document.getElementById("logButton");
-  //   addAnother.innerHTML = "Add Another Entry";
-  //   div.innerHTML = message;
-  //   setFocusToTextBox();
-  // };
-
-  
+/**
+ *  Funciton clearForm
+ *  description: clears all fields with in the form to ""
+ * 
+ */  
   function clearForm(){
-    const addDat = document.getElementById("addDateCheck").unCheck();
+    const addDat  = document.getElementById("addDateCheck");
+      if (addDat.checked) {
+        addDat.click();
+      };
+    const addTime = document.getElementById("manuallyAddTime");
+      if (addTime.checked) {
+        addTime.click();
+      };
+    const worSrt = document.getElementById("startTime");
+    const worStp = document.getElementById("stopTime");
+    console.log("worStp was ready next is worOrd");
     const worOrd = document.getElementById("workOrder");
-    const orDat = document.getElementById("orderDate");
+    const ordDat = document.getElementById("orderDate");
     const cusSel = document.getElementById("customerSelect");
     const cusNam = document.getElementById("customerName");
     const macSel = document.getElementById("machineSelect");
     const macNam = document.getElementById("machineName");
     const logEnt = document.getElementById("logEntry");
     const catSel = document.getElementById("categorySelect");
-    const catName = document.getElementById("categoryName");
+    const catNam = document.getElementById("categoryName");
     const totHrs = document.getElementById("totalHours");
-    let fields = [worOrd,orDat,cusSel,cusNam,macSel,macNam,logEnt,catSel,catNam,totHrs];
-
+    let fields = [catSel,catNam,worSrt,worStp,ordDat,worOrd,cusSel,cusNam,macSel,macNam,logEnt,totHrs];
+    addDat.checked = false;
     fields.forEach((field) => (field.value=""));
     document.getElementById("logButton").disabled=false;
     return;
   };
 
+/**
+ * Funciton onSuccess - handles the callback from a successful server call  
+ * 
+ * @param {string} message - the returned message data confirmation 
+ */
   function onSuccess(message){
-    console.log("I was called! ");
+    console.log("onSuccess was called! Message was: "+message);
     clearForm();
     window.scrollTo(0,0); 
     let div = document.getElementById("output");
     let addAnother = document.getElementById("logButton");
     addAnother.innerHTML = "Add Another Entry";
-    div.innerHTML = message;
-    setFocusToTextBox();
+    div.innerHTML = "";
+    setFocusToTextBox("categorySelect");
+    checkOption("reset","reset");
+    spinner("remove");
     return
   };
 </script>
 <script>
+  /**
+   * Function onFailure -  handles the call back from server call
+   * @param {string} message - the returned error information
+   */
   function onFailure(message){
     console.log("Failure Handler Was Called"+ message)
     document.getElementById("output").innerHTML="Failure Handler Was Called: "+ message;
     return
   };
 </script>
+
 <script>
+  /**
+   * function handleFormSubmit 
+   * Gathers all the input values and sends them as a object to the spreadsheet Script
+   * 
+   */
+
   function handleFormSubmit(){
     console.log("This Log is after the form object log");
-    document.getElementById("logButton").disabled=true;
-    document.getElementById("output").innerHTML="processing...";
-    let addDate = document.getElementById("addDateCheck").value;
-    let orderDate = document.getElementById("orderDate").value;
-    let customerSelect = document.getElementById("customerSelect").value;
-    let customerName = document.getElementById("customerName").value;
-    let machineSelect = document.getElementById("machineSelect").value;
-    let machineName = document.getElementById("machineName").value;
-    let logEntry = document.getElementById("logEntry").value;
-    let category = document.getElementById("categorySelect").value;
-    let newCategory = document.getElementById("categoryName").value;
+    spinner("add");
+    document.getElementById("logButton").disabled = true;
+    document.getElementById("output").innerHTML = "processing...";
+    const order = document.getElementById("workOrder").value;
+    const addDate = document.getElementById("addDateCheck").checked;
+    const workDate = document.getElementById("orderDate").value;
+    const addTime = document.getElementById("manuallyAddTime").checked;
+    console.log("Add time was Cheked? : "+addTime);
+    let start = addTime ? document.getElementById("startTime").value:"";
+    console.log("Start time Value: "+start);
+    let stop = addTime ? document.getElementById("stopTime").value:"";
+    console.log("Stop time Value: "+stop);
+    console.log("Date Check Box Value:-> "+ addDate);
+    let woDate = addTime? new Date(start).toJSON(): new Date().toJSON();
+    let ordDate = addTime? new Date(woDate).toJSON(): new Date().toJSON();
+    addDate? ordDate = new Date(workDate).toJSON(): console.log("ordDate as addTime: "+ordDate);
+    console.log("ordDate: "+ordDate)
+    
+    // const timeOff = document.getElementById("sbscentList").value;
+    const cusSelect = document.getElementById("customerSelect").value;
+    const cusName = document.getElementById("customerName").value;
+    const macSelect = document.getElementById("machineSelect").value;
+    const macName = document.getElementById("machineName").value;
+    const logEn = document.getElementById("logEntry").value;
+    const catSelect = document.getElementById("categorySelect").value;
+    const catName = document.getElementById("categoryName").value;
     let hours = document.getElementById("totalHours").value;
-    let order = document.getElementById("workOrder").value;
+    if(addTime){
+      start = new Date(start).getTime()
+      stop = new Date(stop).getTime()
+    }
     let formObject = {
-          addDateCheck:addDate,
-          dateOfOrder:orderDate,
-          customerSelect:customerSelect,
-          customerName:customerName,
-          machineSelect:machineSelect,
-          machineName:machineName,
-          categorySelect:category,
-          newCategory:newCategory,
-          logEntry:logEntry,
-          totalHours:hours,
           workOrder:order,
+          addDateCheck:addDate,
+          dateOfOrder:ordDate,
+          // timeOff:timeOff,
+          customerSelect:cusSelect,
+          customerName:cusName,
+          machineSelect:macSelect,
+          machineName:macName,
+          categorySelect:catSelect,
+          categoryName:catName,
+          addTime:addTime,
+          startTime:start,
+          stopTime:stop,
+          logEntry:logEn,
+          totalHours:hours,
       };
     console.log(formObject);
     google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).AddResponse(formObject);
@@ -139,14 +131,16 @@
     console.log("Success handler called!!!!!")
     console.log(machines);
     let machineSelection = document.getElementById('machineSelect');
-    let selectMachine = document.getElementById("selectMachine").classList;
+    let selectMachine = document.getElementById("machineSelectWrapper").classList;
     console.log(selectMachine);
-    document.getElementById('selectMachine').classList.remove("hidetillneeded");
+    document.getElementById('machineSelectWrapper').classList.remove("hidetillneeded");
     selectMachine.remove("hideTillNeeded")
     machineSelection.length = 0;
     machines.forEach(function(machineEntry){
     machineSelection.options.add(new Option(machineEntry, machineEntry))
     });
+    machineSelection.options.add(new Option("New Machine", "New Machine"))
+    setFocusToTextBox('machineSelect');
   };
 </script>
 <script>
@@ -158,89 +152,205 @@
   };
 </script>
 <script>
-  function checkOption(selection){    
-    console.log(selection);
-    if(selection === "New Machine"){
-      let addMachineName = document.getElementById("newMachine");
-      addMachineName.classList.remove("hideTillNeeded");
-    }else if(selection === "New Customer"){
-      let addCustomerName = document.getElementById("newCustomer");
-      addCustomerName.classList.remove("hideTillNeeded");
-    }else if(selection === "New Category"){
-      let addCategoryName = document.getElementById("newCategory");
-      addCategoryName.classList.remove("hideTillNeeded");
+  function checkOption(selection,element){    
+    spinner();
+    const workOrder = document.getElementById("wrkOrdr");
+    const addTimeOff = document.getElementById("sbscentSelect");
+    
+    const addTime = document.getElementById("addTimeByHand");
+    const addDate = document.getElementById("orderDateField");
+    // Job Time Elements
+    const addStartTime = document.getElementById("newStartTime");
+    const addStopTime = document.getElementById("newStopTime");
+    // Machine Name Elements
+    const addSelectMachine = document.getElementById("machineSelectWrapper");
+    const selectMachine = document.getElementById("machineSelect");
+    const addMachineName = document.getElementById("machineNameWrapper");
+    //Customer Name Elements
+    const addSelectCustomer = document.getElementById("customerSelectWrapper");
+    const selectName = document.getElementById("customerSelect")
+    const addCustomerName = document.getElementById("customerNameWrapper");
+    // Category Elements
+    const categorySelect = document.getElementById("categorySelect")
+    const addCategoryName = document.getElementById("newCategory");       
+    // Job Detail Elements
+    const addlogEntry = document.getElementById("logEntryWrapper");
+    const addHours = document.getElementById("totalHoursWrapper");
+    
+    console.log("checkOption function call was passed the values: "+selection+" and: "+element);
+    
+    if(element === "machineSelect"){
+      if(selection === "New Machine"){
+        addMachineName.classList.remove("hideTillNeeded");
+      }else{
+        addMachineName.classList.add("hideTillNeeded");
+      };
+    }else if(element === "name"){
+        if(selection === "New Customer"){
+        addCustomerName.classList.remove("hideTillNeeded");
+        selectMachine.value = "New Machine";
+        addSelectMachine.classList.add("hideTillNeeded");  
+        addMachineName.classList.remove("hideTillNeeded")
+          }else{
+            addCustomerName.classList.add("hideTillNeeded");
+          }
+    }else if(element === "cat"){
+      if(selection === "Internal"){
+        addTime.classList.remove("hideTillNeeded");
+        addSelectCustomer.classList.add("hideTillNeeded");
+        selectName.value = "Taurus Craco";
+        console.log("Value of Customer is: "+selectName.value);
+        addSelectMachine.classList.remove("hideTillNeeded");
+        addHours.classList.add("hideTillNeeded");
+        workOrder.classList.add("hideTillNeeded")
+        gotCustomer(selectName.value);
+        setFocusToTextBox("machineSelect");  
+        // addStartTime.classList.remove("hideTillNeeded");
+        // addStopTime.classList.remove("hideTillNeeded");
+        // addHours.classList.add("hideTillNeeded");
+      }else if(selection === "New Category"){
+        addCategoryName.classList.remove("hideTillNeeded");  
+        addStartTime.classList.add("hideTillNeeded");
+        addStopTime.classList.add("hideTillNeeded");
+      }else if(selection === "Installation"){
+        workOrder.classList.remove("hideTillNeeded")
+        addSelectCustomer.classList.remove("hideTillNeeded")
+        addCustomerName.classList.add("hideTillNeeded");
+        setFocusToTextBox("workOrder");
+      }else if(selection === "Service"){
+        workOrder.classList.remove("hideTillNeeded")
+        addTime.classList.add("hideTillNeeded")
+        addSelectCustomer.classList.remove("hideTillNeeded")
+        addCustomerName.classList.add("hideTillNeeded");
+        addSelectMachine.classList.remove("hideTillNeeded");
+        setFocusToTextBox("workOrder");  
+      }else {
+        workOrder.classList.remove("hideTillNeeded");
+        addStartTime.classList.add("hideTillNeeded");
+        addStopTime.classList.add("hideTillNeeded");
+        addHours.classList.remove("hideTillNeeded");
+      }
+    }else if(element === "reset"){
+      addTimeOff.classList.add("hideTillNeeded");
+      workOrder.classList.add("hideTillNeeded");
+      addStartTime.classList.add("hideTillNeeded");
+      addStopTime.classList.add("hideTillNeeded");
+      addHours.classList.remove("hideTillNeeded");
+      addCustomerName.classList.add("hideTillNeeded");
+      addMachineName.classList.add("hideTillNeeded");
+    }else if(element === "time"){
+      if(selection){
+          addStartTime.classList.remove("hideTillNeeded");
+          addStopTime.classList.remove("hideTillNeeded"); 
+        }else if(!selection){
+          addStartTime.classList.add("hideTillNeeded");
+          addStopTime.classList.add("hideTillNeeded"); 
+        } ;  
+    }else if(element === "date"){
+      if (selection){
+          console.log("dateBox evaluated to true");
+          addDate.classList.remove("hideTillNeeded");
+          workOrder.classList.remove("hideTillNeeded");
+        }else{
+          categorySelect.value === "Internal"? workOrder.classList.add("hideTillNeeded"):console.log("Category Select is: "+categorySelect.value+" not Internal so workorder will not be removed");
+          console.log("dateBox evaluated to false");
+          addDate.classList.add("hideTillNeeded"); 
+      };
+    };
+
+    spinner("remove")
+  };
+
+function spinner(option){
+  let spinnerVisible = document.getElementById("spinner");      
+  if(option === "remove"){
+      spinnerVisible.classList.remove("is-active");
     }else{
-      let addCustomerName = document.getElementById("newCustomer");
-      addCustomerName.classList.add("hideTillNeeded"); 
-      let addCategoryName = document.getElementById("newCategory");
-      addCategoryName.classList.add("hideTillNeeded"); 
-      let addMachineName = document.getElementById("newMachine");
-      addMachineName.classList.add("hideTillNeeded"); 
+      spinnerVisible.classList.add("is-active");
+  }
+}
+</script>
+<script>
+  function calcTime(value,id){
+    const startValue = document.getElementById("startTime").value;
+    let startTime = new Date(startValue).getTime()
+    const stopValue = document.getElementById("stopTime").value;
+    let endTime = new Date(stopValue).getTime();
+    if(!startTime || !endTime){
+    }else if(endTime > startTime){
+      let msDiff = (endTime - startTime);
+      const sec = 1000;
+      let tMs = Math.floor(msDiff % sec);
+      let diff = msDiff - tMs;
+      const min = sec * 60;
+      const dMin = 10 * min;
+      let qHr = 15 * min;  
+      const hr = 60 * min; 
+      let tMin = diff>hr ? Math.floor((diff%hr)/min) : Math.floor(diff/min);
+      let tQhr = diff>= qHr ? Math.floor((diff%hr)/qHr) : "0";
+      let display = tQhr *25;
+      let decMin = diff>=dMin ? Math.floor((diff%hr)/dMin) : "0";
+      let sMin = diff>=dMin ? Math.floor(tMin-(decMin*10)) : Math.floor((diff%dMin)/min);
+      let tHrs = diff>hr ? Math.floor(diff/hr) : "00";
+      let timeSpent = tHrs+"."+display;
+      document.getElementById("totalHours").value = timeSpent;
     };
   };
 </script>
 <script>
+   /**
+    * @Function gotCustomer - triggered onChange from the select customer element 
+    * 
+    * @param {string} customer - The value of the customer select element
+    * returns - 
+    */
   function gotCustomer(customer){
-    console.log("Select Box change Heard and function will be called with the value of:")
+    console.log("Select Box change Heard and function will be called with the value of:");
     console.log(customer);
-    let addCustomerName = document.getElementById("newCustomer").classList;
-    let addMachineName = document.getElementById("newMachine").classList;
-    let selectMachine = document.getElementById("selectMachine").classList;
+    checkOption(customer,"name");
     let selectName = document.getElementById("customerSelect");
         customer = selectName.value;
         console.log(customer);
       if(customer === "New Customer"){
-        addCustomerName.remove("hideTillNeeded");
-        addMachineName.remove("hideTillNeeded");
-        selectMachine.add("hideTillNeeded");
-        console.log("Customer Name was matched as true");
+        console.log("New Customer was matched as true");
+        checkOption(customer,"name")
       }else {
         console.log("This is the passed value before getting it from element: "+customer);
-        customer = selectName.value;    
-        console.log(customer);
-        selectMachine.remove("hideTillNeeded");
-        addCustomerName.add("hideTillNeeded");
-        addMachineName.add("hideTillNeeded");
-        document.getElementById("machineSelect").remove(machineSelect.pleaseSelect);
         google.script.run.withSuccessHandler(gotMachines).withFailureHandler(noMachines).GetMachines(customer); 
       };
     };
 </script>
 <script>
+  /**
+   * Function gotCategory - run when a category has been selected 
+   * 
+   */
   function gotCategory(category){
-    console.log("Select Box change Heard and function will be called with the value of:")
-    console.log(category);
-    let addCatName = document.getElementById("newCategory").classList;
-    let selectCat = document.getElementById("categorySelect").classList;
-    let selectName = document.getElementById("categorySelect");
-        category = selectName.value;
-        console.log(category);
-      if(category === "New Category"){
-        addCatName.remove("hideTillNeeded");
-        selectCat.add("hideTillNeeded");
-        console.log("Category needed wasnt found Asking for new Category");
-      }else {
-        console.log("This is the passed value before getting it from element: "+customer);
-        category = selectName.value;    
-        console.log(category);
-        selectMachine.remove("hideTillNeeded");
-        addCustomerName.add("hideTillNeeded");
-        addMachineName.add("hideTillNeeded");
-        document.getElementById("machineSelect").remove(machineSelect.pleaseSelect);
-        google.script.run.withSuccessHandler(gotMachines).withFailureHandler(noMachines).GetMachines(customer); 
-      };
-    };
+    checkOption(category,"cat");
+    console.log("Select Box change Heard and function will be called with the value of:");
+  };
 </script>
 <script>
-  function setFocusToTextBox(){
-    document.getElementById("customerSelect").focus();
+  /**
+   * Function setFocusToTextBox - sets the carrot to the first element upon load and reset  
+   */
+  function setFocusToTextBox(elementId){
+    document.getElementById(elementId).focus();
   };
-
+  
+  /**
+   * Function EmailSheet - Not yet ready for production 
+   * 
+   */
   function EmailSheet(){
     addSpinner('is-active');
     google.script.run.withSuccessHandler(emailSuccess).withFailureHandler(emailFailure).emailCurrentSheet();
   };
 
+  /**
+   * Function emailSuccess - still in alpha not yet ready for use
+   * 
+   */
   function emailSuccess(message){
     let ss = SpreadSheetApp.getActiveSpreadsheet();
     clearForm();
@@ -248,46 +358,25 @@
     let addAnother = document.getElementById("EmailButton");
     addAnother.innerHTML = "Email Again?";
     div.innerHTML = message;
-    setFocusToTextBox()
+    setFocusToTextBox("categorySelect")
   removeSpinner('is-active');
   };
 
   function emailFailure(message){
     console.log("Failure to Send Email"+ message)
-  removeSpinner('is-active');
+    removeSpinner('is-active');
   };
 
+  /**
+   * Function addOrderDateField - unhides the orderDate option  
+   * @param {Object} dateBox -  the check box used to show the OrderDate Feild
+   */
   function addOrderDateField(dateBox){
-    console.log("addOrderDateFeild Called");
-    console.log(dateBox);
-    console.log(dateBox.checked)
-    let checkBox = document.getElementById("addOrderDate");
-    let addDate = document.getElementById("orderDateField");
-    if (dateBox.checked == true){
-      console.log("dateBox evaluated to true");
-      addDate.classList.remove("hideTillNeeded");
-    }else{
-      console.log("dateBox evaluated to false");
-      addDate.classList.add("hideTillNeeded"); 
-    };
+    console.log("addOrderDateField Called");
+    checkOption(dateBox.checked,"date")
   }
-  
-  // const addOrderDateCheckBox = document.querySelector("#addDateCheck");
-  // const orderDateInput = document.querySelector("#orderDateField");
-  // orderDateInput.style.visibility = "hidden";
-  
-  // addOrderDateCheckBox.addEventListener("change", () => {
-  //   let addDate = document.getElementById("orderDateField");
-  //     if(addOrderDateCheckBox.checked){
-  //       addDate.classList.remove("hideTillNeeded")
-  //       console.log("Checkbox listener function has been triggered! and evaluates TRUE");
-  //       orderDateInput.style.visibility = "visible"; 
-  //     } else {
-  //       addDate.classList.add("hideTillNeeded");
-  //       orderDateInput.style.visibility = "hidden";
-  //       console.log("Checkbox listener function has been triggered! and evaluates FALSE");
-  //     }
-  //   }
-  // );
+
+ 
+
   console.log("Javescript has been evaluated to the bottom of the page!");
 </script>

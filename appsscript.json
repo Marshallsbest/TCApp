@@ -24,10 +24,6 @@
       }
     ]
   },
-  "webapp": {
-    "executeAs": "USER_DEPLOYING",
-    "access": "ANYONE_ANONYMOUS"
-  },
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8",
   "sheets": {
@@ -127,7 +123,24 @@
       {
         "menuName": "Weeknum",
         "functionName": "Weeknum"
+      },
+      {
+        "menuName": "DateFormatting",
+        "functionName": "DateFormatting",
+        "defaultShortcut": "Ctrl+Alt+Shift+6"
+      },
+      {
+        "menuName": "Dateformatting2",
+        "functionName": "Dateformatting2"
+      },
+      {
+        "menuName": "formatting3",
+        "functionName": "formatting3"
       }
     ]
+  },
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
   }
 }

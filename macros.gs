@@ -174,3 +174,53 @@ function Weeknum() {
   spreadsheet.getCurrentCell().setValue('')
   .setFormulaR1C1('=WEEKNUM(R[0]C[1])');
 };
+
+function DateFormatting() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getCurrentCell().offset(-2, -4).activate();
+  spreadsheet.getCurrentCell().offset(-2, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+};
+
+function Dateformatting2() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getActiveRangeList().setNumberFormat('ddd", "mmm" "d", "yy');
+};
+
+function formatting3() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getCurrentCell().offset(0, -5).activate();
+  spreadsheet.getCurrentCell().offset(-5, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(-7, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getActiveRangeList().setNumberFormat('ddd", "mmm" "d", "yy');
+  spreadsheet.getCurrentCell().offset(-13, 0).activate();
+  spreadsheet.getActiveRangeList().setNumberFormat('ddd", "mmm" "d", "yy');
+  spreadsheet.getCurrentCell().offset(3, 0).activate();
+  var destinationRange = spreadsheet.getActiveRange().offset(0, 0, 11);
+  spreadsheet.getActiveRange().autoFill(destinationRange, SpreadsheetApp.AutoFillSeries.DEFAULT_SERIES);
+  spreadsheet.getCurrentCell().offset(-2, 0).activate();
+  spreadsheet.getCurrentCell().offset(-1, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-2, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-3, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-4, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(2, 0).activate();
+  spreadsheet.getCurrentCell().offset(-6, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-7, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(-2, 0).activate();
+  spreadsheet.getCurrentCell().offset(-5, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(3, 0).activate();
+  spreadsheet.getCurrentCell().offset(-8, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-9, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-10, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-11, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-12, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  spreadsheet.getCurrentCell().offset(1, 0).activate();
+  spreadsheet.getCurrentCell().offset(-13, 0).copyTo(spreadsheet.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+};

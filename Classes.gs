@@ -4,78 +4,33 @@
 
 class Information{
   constructor(){
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    this.name = ss.getRangeByName("FIRST_NAME").getValue();
-    this.managersEmail = ss.getRangeByName("MANAGERS_EMAIL").getValue();
-    this.email = ss.getRangeByName("PERSONAL_EMAIL").getValue();
-    this.firstName = ss.getRangeByName("FIRST_NAME").getValue();
-    this.lastName = ss.getRangeByName("LAST_NAME").getValue();
-    this.companyName = ss.getRangeByName("COMPANY_NAME").getValue(); 
-    this.includingMyManager = ss.getRangeByName("INCL_MANAGER").getValue();
-    this.includePersoanlEmail = ss.getRangeByName("INCL_PERSONAL").getValue();
-    this.techName = ss.getRangeByName("TECH_NAME").getValue();
-    this.logo = ss.getRangeByName("COMPANY_LOGO_URL").getValue();
-    this.autoEmail = ss.getRangeByName("AUTO_EMAIL").getValue();
-  }
+    const ss = SpreadsheetApp.getActiveSpreadsheet().getRangeByName;
+    this.DC_NM = ss("DOC_NAME").getValue();
+    this.THM_BCKGRND_CLR = ss("HEADER_BACKGROUND_COLOUR").getValue();
+    this.THM_FNT_CLR = ss("HEADER_FONT_COLOUR").getValue();
+    this.LS = ss("LOG_SHEET").getValue();
+    this.CMP_LOGO_URL = ss("COMPANY_LOGO_URL").getValue();
+    this.PRSNL_EML = ss("PERSONAL_EMAIL").getValue();
+    this.MNGR_EML = ss("MANAGERS_EMAIL").getValue();
+    this.CMP_NM = ss("COMPANY").getValue();
+    this.FRST_NM = ss("FIRST_NAME").getValue();
+    this.LST_NM = ss("LAST_NAME").getValue();
+    this.FL_NM = ss("TECH_NAME").getValue();
+    this.AUT_EMAIL = ss("AUTO_EMAIL").getValue();
+    this.INCL_MNGR = ss("INCL_MANAGER").getValue();
+    this.INCL_PRSNL = ss("INCL_PERSONAL").getValue();
+    this.MNGR_FRST_NM = ss("MANAGER_FIRST_NAME").getValue();
+    this.MNGR_LST_NM = ss("MANAGER_LAST_NAME").getValue();
+  };
 }
-
-
 /**
- *  ClientData is the object class which should handle the Usage of Client data 
- */
-// class ClientData{
-//   constructor(name){
-//     const ss = SpreadsheetApp.getActiveSpreadsheet();
-//     this.companyName = name;
-//     }
-//     initializeClient(name,machines){
-//       let sheet;
-//       if(ss.getSheetByName(name)){
-//         sheet = ss.getSheetByName(name).activate();
-//       }else{
-//         sheet = ss.insertSheet(name).activate();
-        
-//       };
-//       let info = [];
-//       let data = [];
-//       data.unshift("Name:")
-//       data.unshift(name)
-//       machines.forEach(machine => {
-//         info.unshift(machine) 
-//       });
-//       info.unshift("Machines:");
-//       sheet.appendRow(info);
-//       sheet.appendRow("Date","Machine","Log","time").activate();
-//       sheet.getRange(1,1,2,10).setBackground('#38761d')
-//         .setFontColor('#ffe599')
-//         .setHorizontalAlignment('center')
-//         .setFontWeight('bold');
-//       }
-// }
-
-/**
- * Function: Customer
- * @param {string} name
- * @param {string} machine
- * @param {string} category
- * @param {string} log
- * @param {date} logDate
+ * test info class
  * 
  */
-// function customerLog(name,machine,category,log,logDate){
-//     this.name = name;
-//     this.log = log;
-//     this.serviceLogs = [];
-//     this.category = category;
-    
-//         addMachine(machine){
-//       machines.unshift(machine);
-//     };
-//     getAssetList(name){
-//       machines = GetClientAssetList(name).shift();
-//       return machines
-//     }; 
-
+function testInfoClass(){
+  const info = new Information;
+  console.log(info);
+}
 /**
  * Class: Record
  * this creates an record object from the form response ;
@@ -83,25 +38,31 @@ class Information{
  * @param {string} name : String the name of the record being requested
  * @param {object} formObject : the data sent from a form submission to create a new record
  */
- class Record{
+class Record{
   constructor(formObject,name){
-    if(name){let formObject = getRecord(name)}
-    this.customer = formObject.customerName ? formObject.customerName : formObject.customerSelect;
-    this.machine = formObject.machineName ? formObject.machineName:formObject.machineSelect;
-    this.logEntry = formObject.logEntry;
-    this.hours = formObject.totalHours;
-    this.workOrder = formObject.workOrder;
-    this.category = formObject.category;
+    console.log("New Record Class Constructor Called:  "+ formObject);
     this.date = new Date();
-    this.orderDate = formObject.addDateCheck == "on" ? new Date(formObject.dateOfOrder) : this.date;
-    // this.time = Utilities.formatDate(this.date,'EST','HH:mm');
-    console.log(this.orderDate)
-    this.orderWeekMonday = getMonday(this.orderDate)
-    this.orderWeek = getWeekNum(this.orderDate)
-    this.logSheet = getThisYearsLogSheet()
-    console.log(this.orderWeek);
+    if(name != null){formObject = getRecord(name)}
+    this.workOrder = formObject.workOrder;
+    console.log("This order Date: "+formObject.dateOfOrder);
+    this.orderDate = new Date(formObject.dateOfOrder);
+    this.timeOff = formObject.timeOff;
+    this.customer = formObject.customerSelect == "New Customer" ? updateCustomerList(formObject.customerName, formObject.machineName): formObject.customerSelect;
+    this.machine = formObject.machineSelect == "New Machine" ? addNewAsset(formObject.customerName, formObject.machineName) : formObject.machineSelect;
+    this.category = formObject.categorySelect == "New Category" ? updateCategoryList(formObject.categoryName) : this.category = formObject.categorySelect
+    this.logEntry = formObject.logEntry;
+    this.addTime = formObject.addTime;
+    this.start = formObject.addTime ? new Date(formObject.startTime):"";
+    this.stop = formObject.addTime ? new Date(formObject.stopTime):"";
+    this.hours = formObject.totalHours;
+    this.time = Utilities.formatDate(this.date,'EST','HH:mm');
+    this.orderWeek = getWeekNum(this.orderDate);
+    this.logYear = this.orderDate.getFullYear()+" Logs"
+    console.log("This log Sheet Name: "+this.logYear);
+    console.log("This Order Date: "+this.orderDate);
+    console.log("This Order Week: "+this.orderWeek);
   };
-  addClient(){
+    addClient(){
     try{
       dataStore("get","doc",this.customer)
     } catch(err) {
@@ -110,12 +71,28 @@ class Information{
     }
   };
   setLogRecord(){
-    let logYear = this.orderDate.getFullYear()
-    let sheet = this.logSheet.activate();  
+    if(this.stop === "" && this.hours === ""){
+      console.log("CalcTime will be called");
+      let calcTime = getLastEntryTime(new Date());
+      console.log("CalcTime is:"+calcTime)
+      this.start = calcTime.start;
+      this.stop = calcTime.stop;
+      this.hours = calcTime.hours;
+    }
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    console.log("record.setLogRecord was called! and the Sheet name is: |"+this.logYear+"|")
+    let sheet = ss.getSheetByName(this.logYear).activate();  
+    // let oDate = Utilities.formatDate(this.orderDate,"GMT -5:00",dtFormat,)
     try {
-      sheet.appendRow([this.orderWeek,this.orderDate,this.customer,this.machine,this.category(),this.logEntry,this.hours,this.workOrder]);
+      console.log("Try was called to append the row to page: "+ss.getSheetName() )
+      let entry = [this.orderWeek,this.orderDate,this.category,this.customer,this.machine,this.logEntry,this.start,this.stop,this.hours,this.workOrder,this.time];
+      sheet.appendRow(entry);
+      console.log("added this to the log Sheet: "+entry);
+      formatEntryRow(this.logYear)
       return "success! Record added to "+sheet.getSheetName;
+      
     } catch (error) {
+      console.log("The try append failed and caught this error: "+error)
      return "logging Error: "+error 
     }
   };

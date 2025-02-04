@@ -180,23 +180,18 @@ function addLogSheet(logSheet,sheet){
   }
 
 
-  function getThisYearsLogSheet(){
+  function getThisYearsLogSheet(date){
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let yearSheet;
-    let currentYear = new Date().getUTCFullYear().toString();
+    let currentYear = date.getUTCFullYear().toString();
       console.log("Full Year: "+currentYear);
     let dataArchive = currentYear+" Logs";
       console.log(dataArchive)
-    if(ss.getSheetByName(dataArchive)){
-      console.log("Yearsheet is found")
-    }else{
-    console.log("YearSheet wasn't foundt should be created now")
-    ss.insertSheet(dataArchive);
-    addHeaders(dataArchive);
-      
-    }
-  yearSheet = ss.getSheetByName(dataArchive);
-      
-  return yearSheet
+    try{if(ss.getSheetByName(dataArchive)){
+        console.log("Yearsheet is found")
+        return dataArchive;
+        }
+      }catch(err){
+      return err
+    };
   }
   

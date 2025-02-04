@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <base target="_top"> 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css"/>
-  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <meta charset="utf-8">   
+  <meta name="description" content="A webform designed to collect log entries and dump them into a google sheet">
+  <meta name="viewport" content="width=device-width" />
   <title>Luke's Logging App</title>
+  
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+  <link rel="shortcut icon" href="https://cdn11.bigcommerce.com/s-2obsojnfdm/product_images/Favicon2.png?t=1721678222">
+   
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-amber.min.css">
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  
   <?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?>
   
 </head>
@@ -15,6 +24,7 @@
   window.addEventListener('load', function() {
   console.log('Page is loaded');
    document.getElementById("workOrder").focus();
+   spinner("remove");
   });
 </script>
 
@@ -22,35 +32,68 @@
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title">Taurus Craco Service Tech Daily Log</span>
-        <div class="mdl-layout-spacer"></div>
+        <img src="https://cdn11.bigcommerce.com/s-2obsojnfdm/images/stencil/original/white_logo_1721678921__93743.original.png" class="logo"/>
+        <span class="mdl-layout-title"> Daily Work Logs</span>
       </div>
     </header>
-
     <main class="mdl-layout__content">
-      <div class="content-grid mdl-grid">
-        <div class="content-column mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
-        <div class="content-column mdl-shadow--4dp mdl-cell mdl-cell--16-col mdl-cell--4-col-phone mdl-cell--top">
-          <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Add a Log Entry</h2>
-          </div>          
-          <!--  Material spinner element removed until functionality can be tested--> 
+      <div class="mdl-layout-spacer"></div>
+      <div class="mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+          <h2 class="mdl-card__title-text">
+          Add a Log Entry
+          </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+        </div> 
+        <div class="mdl-card__actions mdl-card--border">
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="selectCategory mdl-textfield__input" onchange="gotCategory(this.value,'category')" id="categorySelect" name="categorySelect">
+              <option></option>
+              <? for (var j = 0; j<cat.length; j++ ) { ?>
+                <option value="<?= cat[j] ?>"><?=cat[j]?>
+                </option>
+              <? } ?>
+            </select>
+            <label class="mdl-textfield__label" for="categorySelect">Choose a Category</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newCategory">
+            <label class="mdl-textfield__label" for="categoryName">New Category</label>
+            <input class="mdl-textfield__input" type="text" id="categoryName" name="categoryName"/>
+          </div>
+          <div class="hideTillNeeded" id="addTimeByHand">
+            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="manuallyAddTime">
+              <input type="checkbox" id="manuallyAddTime" class="mdl-switch__input" name="time" onclick="checkOption(this.checked,this.name)"/>
+              <span class="mdl-switch__label">Add time manually?</span>
+            </label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder hideTillNeeded" id="newStartTime">
+            <label class="mdl-textfield__label" for="startTime">Start Time</label>
+            <input class="mdl-textfield__input" type="datetime-local" step="900" id="startTime" name="startTime" onchange="calcTime(this,value , this.name)"/>  
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder hideTillNeeded" id="newStopTime">
+            <label class="mdl-textfield__label" for="stopTime">Stop Time</label>
+            <input class="mdl-textfield__input" type="datetime-local" step="900" id="stopTime" name="stopTime" onchange="calcTime(this,value , this.name)"/>  
+          </div>
+          <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="addDateCheck">
+            <input type="checkbox" id="addDateCheck" class="mdl-switch__input" onclick="addOrderDateField(this, this.value)"/>
+            <span class="mdl-switch__label">Add Work Order Date?</span>
+          </label>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="wrkOrdr">
             <label class="mdl-textfield__label" for="workOrder">Work Order:</label>
             <input class="mdl-textfield__input" type="text" id="workOrder"  name="workOrder"/>  
           </div>
-          <br>
-          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="addDateCheck">
-            <input type="checkbox" id="addDateCheck" class="mdl-checkbox__input" onclick="addOrderDateField(this, this.value)">
-            <span class="mdl-checkbox__label">Add Work Order Date?</span>
-          </label>
-          <br>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label has-placeholder hideTillNeeded" id="orderDateField">
             <label class="mdl-textfield__label" for="orderDate">Defaut is Day of Form submission</label>
-            <input class="mdl-textfield__input" type="date" id="orderDate" name="orderDate"/>  
+            <input class="mdl-textfield__input" type="datetime-local" id="orderDate" name="orderDate"/>  
           </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="sbscentSelect" name="sbscentSelect">
+            <select class="mdl-textfield__input abscentList" id="abscentList" name="abscentList" onchange="checkOption(this.value,this.id)">
+              <option id="default" value=""></option>
+            </select>
+            <label class="mdl-textfield__label" for="abscentList">Please select a reason</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="customerSelectWrapper">
             <select class="selectName mdl-textfield__input" onchange="gotCustomer(this.value)" id="customerSelect" name="customerSelect">
               <option></option>
                 <? for (var i = 0; i<data.length; i++ ) { ?>
@@ -60,65 +103,44 @@
             </select>
             <label class="mdl-textfield__label" for="customerSelect">Choose an Customer</label>
           </div>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newCustomer">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="customerNameWrapper">
             <label class="mdl-textfield__label" for="customerName">Customer Name</label>
             <input class="mdl-textfield__input" type="text" id="customerName" name="customerName"/>
           </div>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="selectMachine" name="selectMachine">
-            <select class="mdl-textfield__input machineSelect" id="machineSelect" name="machineSelect" onchange="checkOption(this.value)">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="machineSelectWrapper" name="selectMachine">
+            <select class="mdl-textfield__input machineSelect" id="machineSelect" name="machineSelect" onchange="checkOption(this.value,this.id)">
               <option id="default" value=""></option>
               <option id="pleaseSelect" value="pleaseSelect">Please select a customer first</option>
-              <option id="New Machine" value="New Machine">New Machine</option>
+              <option id="newMachine" value="New Machine">New Machine</option>
             </select>
-            <label class="mdl-textfield__label" for="machineSelect">Choose a machine</label>
+            <label class="mdl-textfield__label" for="machineSelect">Choose Asset or Work Category</label>
           </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newMachine">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="machineNameWrapper">
             <label class="mdl-textfield__label" for="machineName">Machine Name:</label>
             <input class="mdl-textfield__input" type="text" id="machineName" name="machineName"/>
           </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="logEntryWrapper">
             <label class="mdl-textfield__label" for="logEntry">Log Entry:</label>
             <input class="mdl-textfield__input" type="text" id="logEntry" name="logEntry"/>
           </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <select class="selectCategory mdl-textfield__input" onchange="checkOption(this.value)" id="categorySelect" name="categorySelect">
-              <option></option>
-                <? for (var j = 0; j<cat.length; j++ ) { ?>
-                  <option value="<?= cat[j] ?>"><?=cat[j]?>
-                  </option>
-                <? } ?>
-            </select>
-            <label class="mdl-textfield__label" for="categorySelect">Choose a Category</label>
-          </div>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label hideTillNeeded" id="newCategory">
-            <label class="mdl-textfield__label" for="categoryName">New Category</label>
-            <input class="mdl-textfield__input" type="text" id="categoryName" name="categoryName"/>
-          </div>
-          <br>
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="totalHoursWrapper">
             <label class="mdl-textfield__label" for="totalHours">Total Hours:</label>
             <input class="mdl-textfield__input" type="number" id="totalHours" name="totalHours" step="0.25"/>
           </div>
+          <div class="hideTillNeeded" id="output" ></div>
+          <div class="mdl-spinner mdl-js-spinner is-active" id="spinner"></div>
+        <div class="mdl-card--border"></div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="logButton" onclick="handleFormSubmit()">Submit</button>
+        
           <br>
-          <div id="output" >
-            </div>
-          <div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="logButton" onclick="handleFormSubmit()">Submit</button>
-          </div>
-            <br>
-            <br>
-          <div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="EmailButton" onclick="EmailSheet()">Email Log Sheet</button>
-          </div>
           <br>
-        </div><!-- mdl-cell -->
-        <div class="content-column mdl-cell mdl-cell--2-col mdl-cell--hide-phone"></div>
-      </div><!-- mdl-grid -->
-    </main>
-  </div>
+        <div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="EmailButton" onclick="EmailSheet()">Email Log Sheet</button>
+        </div>
+        </div> <!--mdl-card__actions -->
+      </div> <!-- wide-card mdl-card-->
+    </main> <!-- mdl-layout__content-->
+  </div> <!-- mdl-layout-->
   <!-- Add the JavaScript  -->
   <?!= HtmlService.createHtmlOutputFromFile('JavaScript').getContent(); ?>
 </body>

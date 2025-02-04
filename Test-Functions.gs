@@ -1,21 +1,31 @@
-// /**
-//  * Function for inputting test data from the spreadsheet Customer menu
-//  */
+/**
+ * Function for inputting test data from the spreadsheet Customer menu
+ */
 
 function AddTestEntry() {
-// console.log("Test Entry was Called")
-  const ACTIVE_ENTRY_SHEET = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getMonday());
-  let currentTime = Utilities.formatDate(new Date(),'GMT','HH:mm');
-  let currentDate = new Date();
+  // let dataDate = Utilities.formatDate(new Date("2024-11-24T12:00:00"),'EMT','HH:mm');
+  // let dataDate2 = Utilities.formatDate(new Date("2024-11-24T13:00:00"),'EMT','HH:mm');
+console.log("Test Entry was Called")
+  // let currentTime = Utilities.formatDate(new Date(),'EMT','h:mm a');
+  // let currentDate = Utilities.formatDate(new Date(),'EMT','h:mm a');
   let userObject = {
-    customerName:"Taurus Craco",
-    machine:"Show Room",
-    logEntry:"Testing Object",
-    totalHours:2,
-    workOrder:"NaN"
-  };
+    addDateCheck: false,
+    addTime: false,
+    categoryName: "",
+    categorySelect: "Service",
+    customerName: "Magncon",
+    customerSelect: "New Customer",
+    dateOfOrder: "2025-01-17T20:59:07.117Z",
+    logEntry: "Electrical Supply wiring had loose terminals",
+    machineName: "Fimal P350",
+    machineSelect: "New Machine",
+    startTime: "",
+    stopTime: "",
+    totalHours: "1.75",
+    workOrder: "12027"
+    };
   AddResponse(userObject);
-  console.log(dataStore("get","Doc","Taurus Craco"))
+  console.log()
   return SpreadsheetApp.getActiveSpreadsheet().toast("Response added successfully!");
 };
 
@@ -32,7 +42,7 @@ function AddTestEntry() {
 // // console.log("New Customers Array being passed =");
 // // console.log(newCustomers);
 // // console.log("Updated Customer List = ");
-// //   UpdateCustomerList(newCustomers)
+// //   updateCustomerList(newCustomers)
 // // }
 
 
@@ -102,7 +112,7 @@ console.log("Machines are: " + machines);
 // console.log("New Customers Array being passed =");
 // console.log(newCustomers);
 // console.log("Updated Customer List = ");
-//   UpdateCustomerList(newCustomers)
+//   updateCustomerList(newCustomers)
 // }
 
 
@@ -118,4 +128,42 @@ function test_getFolderByName() {
   console.log(`Name: ${folder.getName()}\rID: ${folder.getId()}\rDescription: ${folder.getDescription()}`)
   // To automatically delete test folder, uncomment the following code:
   // folder.setTrashed(true);
+}
+
+/**
+ *  Test Date Week NUmber 
+ *  
+ */
+function testGetWeekNum(){
+  let today = getMondayAsDate(new Date);
+  let num = getWeekNum(today)
+  console.log("this weeks number is -> "+ num+" <-!!!"); 
+}
+
+/**
+ * function testGetCustomerRow - Pass in a value that is currently in the list to test it  
+ * 
+ * 
+ * */
+ 
+ function testGetCustomerRow(){
+  console.log(getCustomerRow("Furniture in Style"))  
+}
+
+/**
+ *  function testCapitalization 
+ */
+function testCapitalize(){
+  console.log (capitalize(" just some testing text "))
+}
+
+
+function playingWithTime(){
+const log = console.log;
+const randomMinutes = Math.random()*1000*60*60;
+const startTime = new Date().getTime();
+const endTime = new Date().getTime()+randomMinutes;
+console.log(startTime);
+console.log(endTime);
+log. getTime(startTime,endTime)
 }

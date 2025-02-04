@@ -18,24 +18,24 @@ limitations under the License.
 */
 
 // TODO: To test this solution, set EMAIL_OVERRIDE to true and set EMAIL_ADDRESS_OVERRIDE to your email address.
-const EMAIL_OVERRIDE = false;
-const EMAIL_ADDRESS_OVERRIDE = 'test@example.com';
+// const EMAIL_OVERRIDE = false;
+// const EMAIL_ADDRESS_OVERRIDE = 'test@example.com';
 
-// Application constants
-const APP_TITLE = 'Generate and send PDFs';
-const OUTPUT_FOLDER_NAME = "Customer PDFs";
-const DUE_DATE_NUM_DAYS = 15
+// // Application constants
+// const APP_TITLE = 'Generate and send PDFs';
+// const OUTPUT_FOLDER_NAME = "Customer PDFs";
+// const DUE_DATE_NUM_DAYS = 15
 
-// Sheet name constants. Update if you change the names of the sheets.
-const CUSTOMERS_SHEET_NAME = 'Customers';
-const PRODUCTS_SHEET_NAME = 'Products';
-const TRANSACTIONS_SHEET_NAME = 'Transactions';
-const INVOICES_SHEET_NAME = 'Invoices';
-const INVOICE_TEMPLATE_SHEET_NAME = 'Invoice Template';
+// // Sheet name constants. Update if you change the names of the sheets.
+// const CUSTOMERS_SHEET_NAME = 'Customers';
+// const PRODUCTS_SHEET_NAME = 'Products';
+// const TRANSACTIONS_SHEET_NAME = 'Transactions';
+// const INVOICES_SHEET_NAME = 'Invoices';
+// const INVOICE_TEMPLATE_SHEET_NAME = 'Invoice Template';
 
-// Email constants
-const EMAIL_SUBJECT = 'Invoice Notification';
-const EMAIL_BODY = 'Hello!\rPlease see the attached PDF document.';
+// // Email constants
+// const EMAIL_SUBJECT = 'Invoice Notification';
+// const EMAIL_BODY = 'Hello!\rPlease see the attached PDF document.';
 
 
 /**
@@ -259,5 +259,5 @@ function createObjectKeys(keys) {
 }
 // Returns true if the cell where cellData was read from is empty.
 function isCellEmpty(cellData) {
-  return typeof (cellData) == "string" && cellData == "";
+  return typeof(cellData) == "string" ? cellData : false
 }

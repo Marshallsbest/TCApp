@@ -5,12 +5,12 @@
  * easier data submission as it's used
  */
 
-/**
+ /**
  * The Web App Call for the user form to be displayed 
  */
 function doGet(e) {
   let f =  HtmlService.createTemplateFromFile('index.html');
-  f.data = CustomerSelectionList();
+  f.data = customerSelectionList();
   f.cat = getCategories();
   return f.evaluate()
 };
@@ -32,17 +32,32 @@ function AddResponse(formObject){
   console.log("Logging New Record",record)
   let success = [];
   // sheet.appendRow(newEntry);
-  console.log("Logging getRecord results",record.orderDate);
   // sheet.appendRow(record.getRecord());
-  UpdateCustomerList(record.customer)
   try {
     record.setLogRecord() 
-    return  success.push("Successfully added record Log");
     } catch (error) {
     return error 
-    }  
+    };  
+    console.log("Logging getRecord results",record.orderDate);
+  return  success.push("Successfully added record Log");
+    
 };
+ /**
+  * Function clearUserData - used to Clear the cells specific to a given user 
+  *
+  *
+  */
+  function clearUserData(){
+    const info = new Information;
+    info
 
+  }
+
+/**
+ *  Funciton publishTimeSheet - this is a funciton that will create and send a copy of hte time sheet to the users choosen emails
+ * 
+ * 
+ */
 function publishTimeSheet(){
   let ss = SpreadsheetApp;
   let ui = ss.getUi()

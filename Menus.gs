@@ -16,16 +16,10 @@ function onOpen(){
   let ui = SpreadsheetApp.getUi();
   ui.createMenu("🔨Time Sheet Menu🔨")
       .addItem('Add test entry', 'AddTestEntry')
-      .addItem('Add Week to Archive','AddWeekToArchive')
-      .addItem('Create new weekly sheet', 'getWeeklySheet')
+      .addItem('Populate Customer Asset List','createMachineList')
+      .addItem('Clear all user data', 'clearUserData')
       .addSeparator()
-      .addItem('Email Time Sheet', 'EmailCurrentSheet')
-      .addItem('Publish Time Sheet','publishTimeSheet')
-      .addSeparator()
-      .addSeparator()
-      .addItem('Process invoices', 'processDocuments')
-      .addItem('Send emails', 'sendEmails')
-      .addSeparator()
-      .addItem('Reset template', 'clearTemplateSheet')
+      .addItem('Email Time Sheet (Not yet Ready)', 'EmailCurrentSheet')
+      .addItem('Publish Time Sheet (Not yet Ready)','publishTimeSheet')
       .addToUi();
 };
